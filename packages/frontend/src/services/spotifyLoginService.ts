@@ -58,12 +58,12 @@ export class SpotifyLoginService {
       }),
     };
 
+    localStorage.setItem("isLoggedIn", "true");
     const body = await fetch(url, payload);
     const response = await body.json();
 
     localStorage.setItem("spotify_access_token", response.access_token);
     localStorage.setItem("spotify_refresh_token", response.refresh_token);
-    localStorage.setItem("isLoggedIn", "true");
   }
 
   public static async refreshAccessToken() {
