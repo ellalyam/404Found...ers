@@ -32,12 +32,9 @@ export default function Suggestion() {
       console.log(imageSrc);
 
       //emotionRecognitionService.uploadBase64Image(imageSrc);
-      
+      setScreenshotCaptured(true);
       // Using online image with public URL for now to test API
       emotionRecognitionService.identifyEmotion(imageSrc)
-
-      //emotionRecognitionService.identifyEmotion(imageSrc);
-      setScreenshotCaptured(true);
     }
   }, [webcamRef, screenshotCaptured]);
 
