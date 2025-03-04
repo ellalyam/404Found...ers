@@ -1,11 +1,11 @@
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
-const redirectUri: string = "http://localhost:5173";
-// const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
+// const redirectUri: string = "http://localhost:5173";
+const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
 
 export class SpotifyLoginService {
   public static async logUserIn(): Promise<number> {
-    const redirectUri = "http://localhost:5173";
-    //const redirectUri = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
+    // const redirectUri = "http://localhost:5173";
+    const redirectUri = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
     const scope = "user-top-read";
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
