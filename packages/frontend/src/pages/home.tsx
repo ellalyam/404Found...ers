@@ -8,89 +8,90 @@ import "../styling/suggestionComponent.scss";
 import Sidebar from "../components/sidebar";
 import { UserDataService } from "../services/userDataService";
 
-const fakePreviousSuggestions = {
-  suggestions: [
-    {
-      mood: "Anger",
-      name: "1",
-      id: "randomId",
-      dateSuggested: new Date("2025-02-24"),
-      tracks: [
-        {
-          title: "Master Of Puppets",
-          album: "Remastered Deluxe Box Set",
-          artist: "Metallica",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "Master Of Puppets",
-          album: "Remastered Deluxe Box Set",
-          artist: "Metallica",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "Master Of Puppets",
-          album: "Remastered Deluxe Box Set",
-          artist: "Metallica",
-          coverImage: "/default_cover.png",
-        },
-      ],
-    },
-    {
-      mood: "Happiness",
-      name: "2",
-      id: "randomId",
-      dateSuggested: new Date("2025-02-24"),
-      tracks: [
-        {
-          title: "What You Know",
-          album: "Tourist History",
-          artist: "Two Door Cinema Club",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "What You Know",
-          album: "Tourist History",
-          artist: "Two Door Cinema Club",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "What You Know",
-          album: "Tourist History",
-          artist: "Two Door Cinema Club",
-          coverImage: "/default_cover.png",
-        },
-      ],
-    },
-    {
-      mood: "Sadness",
-      name: "3",
-      id: "randomId",
-      dateSuggested: new Date("2025-02-24"),
-      tracks: [
-        {
-          title: "Another Love",
-          album: "Long Way Down",
-          artist: "Tom Odell",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "Another Love",
-          album: "Long Way Down",
-          artist: "Tom Odell",
-          coverImage: "/default_cover.png",
-        },
-        {
-          title: "Another Love",
-          album: "Long Way Down",
-          artist: "Tom Odell",
-          coverImage: "/default_cover.png",
-        },
-      ],
-    },
-  ],
-};
-
+/*
+ *const fakePreviousSuggestions = {
+ *  suggestions: [
+ *    {
+ *      mood: "Anger",
+ *      name: "1",
+ *      id: "randomId",
+ *      dateSuggested: new Date("2025-02-24"),
+ *      tracks: [
+ *        {
+ *          title: "Master Of Puppets",
+ *          album: "Remastered Deluxe Box Set",
+ *          artist: "Metallica",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "Master Of Puppets",
+ *          album: "Remastered Deluxe Box Set",
+ *          artist: "Metallica",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "Master Of Puppets",
+ *          album: "Remastered Deluxe Box Set",
+ *          artist: "Metallica",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *      ],
+ *    },
+ *    {
+ *      mood: "Happiness",
+ *      name: "2",
+ *      id: "randomId",
+ *      dateSuggested: new Date("2025-02-24"),
+ *      tracks: [
+ *        {
+ *          title: "What You Know",
+ *          album: "Tourist History",
+ *          artist: "Two Door Cinema Club",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "What You Know",
+ *          album: "Tourist History",
+ *          artist: "Two Door Cinema Club",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "What You Know",
+ *          album: "Tourist History",
+ *          artist: "Two Door Cinema Club",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *      ],
+ *    },
+ *    {
+ *      mood: "Sadness",
+ *      name: "3",
+ *      id: "randomId",
+ *      dateSuggested: new Date("2025-02-24"),
+ *      tracks: [
+ *        {
+ *          title: "Another Love",
+ *          album: "Long Way Down",
+ *          artist: "Tom Odell",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "Another Love",
+ *          album: "Long Way Down",
+ *          artist: "Tom Odell",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *        {
+ *          title: "Another Love",
+ *          album: "Long Way Down",
+ *          artist: "Tom Odell",
+ *          coverImage: "/default_cover.png",
+ *        },
+ *      ],
+ *    },
+ *  ],
+ *};
+ */
 
 export default function Home() {
   const [previousUserSuggestions, setPreviousUserSuggestions] =

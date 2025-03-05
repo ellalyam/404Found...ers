@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { UserInterface } from "../services/userDataService";
 //import { UserDataService } from "../services/userDataService";
 
-const fakeAccountData = {
-  userProfileImage: "/olivia_rodrigo.png",
-  username: "Olivia Rodrigo",
-  spotifyUserId: "abc123def456ghi789",
-};
+/*
+ *const fakeAccountData = {
+ *  userProfileImage: "/olivia_rodrigo.png",
+ *  username: "Olivia Rodrigo",
+ *  spotifyUserId: "abc123def456ghi789",
+ *};
+ */
 
 import { UserDataService } from "../services/userDataService";
 import { SpotifyLoginService } from "../services/spotifyLoginService";
