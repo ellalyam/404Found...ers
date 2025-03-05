@@ -115,7 +115,7 @@ export default function Home() {
     //UserDataService.getUserName
 
     //mapper functions
-  }, []);
+  });
 
   return (
     <div className="pageContainer">

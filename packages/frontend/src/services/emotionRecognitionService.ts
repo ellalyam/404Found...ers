@@ -16,7 +16,7 @@ class EmotionRecognitionService {
           // Gets job details (including status)
           const waiting =
             await client.expressionMeasurement.batch.getJobDetails(
-              response.jobId,
+              jobId,
             );
           console.log("Got job details");
 

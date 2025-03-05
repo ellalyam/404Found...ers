@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import emotionRecognitionService from "../services/emotionRecognitionService";
 import Webcam from "react-webcam";
 
@@ -54,12 +54,9 @@ export default function Suggestion() {
     }, 3000);
   };
 
-  // Use useEffect to run startWebcam()...???
-  //useEffect(() => {
   if (isCaptureEnable) {
     startWebcam();
   }
-  //}, []);
 
   return (
     <div className="webcam">
