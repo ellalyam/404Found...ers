@@ -16,7 +16,7 @@ export class ComponentMapper {
             mood={suggestion.mood}
             name={suggestion.name}
             tracks={suggestion.tracks}
-            dateSuggested={suggestion.dateSuggested}
+            dateSuggested={new Date(suggestion.dateSuggested)}
           />
         );
       });
