@@ -60,4 +60,4 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model("User", UserSchema);
 const Suggestion = mongoose.model("Suggestion", SuggestionSchema);
 
-module.exports = { User, Suggestion };
+export { User, Suggestion };
