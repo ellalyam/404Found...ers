@@ -58,7 +58,7 @@ jobs:
           path: packages/backend/release.zip
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip node-app.zip
         working-directory: packages/backend
       
       - name: Login to Azure
