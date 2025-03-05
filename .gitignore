@@ -1,2 +1,3 @@
 node_modules/
 packages/backend/.env
+packages/backend/coverage/
