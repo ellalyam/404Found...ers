@@ -5,9 +5,10 @@ import spotifyServices from "./spotifyServices.js";
  * @param {JSON} emotion - From Hume (or user form?)
  */
 function getMainEmotion(emotion) {
-    return emotion
-      .reduce((max, em) => em.score > max.score ? em : max, emotion[0])
-      .name;
+  return emotion.reduce(
+    (max, em) => (em.score > max.score ? em : max),
+    emotion[0],
+  ).name;
 }
 
 /**
@@ -62,6 +63,6 @@ async function getSuggestions(accessToken, songParams) {
   return responseData;
 }
 
-export default {
-  getSuggestions,
+export {
+  getSuggestions, getMainEmotion
 };

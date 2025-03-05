@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+
 import express from "express";
 import cors from "cors";
 import generateSeed from "./services/generateSeed.js"
@@ -38,23 +39,17 @@ app.get("/new-suggestion", (req, res) => {
 
 // Get previous suggestions from DB
 app.get("/suggestions/:id", (req, res) => {
-  const id = req.params["id"];
+  const token = req.headers.token;
+  const id = getUserId(token);
 
   mongoServices
     .findSuggestions(id)
     .then((result) => res.send(result));
 });
 
-// Get user info from Spotify and send to frontend
-app.get("/user/:id", (req, res) => {
-  const id = req.params["id"];
-
-  // TODO: Request profile picture and username from spotify, send to frontend
-});
-
 // Delete user from DB
-app.delete("/user/:id", (req, res) => {
-  const id = req.params["id"];
+app.delete("/user/:token", (req, res) => {
+  const id = getUserId(req.params["token"]);
   mongoServices
     // removeUser calls removeSuggestions in mongoServices so shouldn't have to worry about deleting suggestions here
     .removeUser(id)

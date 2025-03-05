@@ -55,12 +55,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-          path: packages/backend/release.zip
 
       - name: Unzip artifact for deployment
-        run: unzip node-app.zip
-        working-directory: packages/backend
-      
+        run: unzip release.zip
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
