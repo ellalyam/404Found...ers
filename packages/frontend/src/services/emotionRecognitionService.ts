@@ -1,6 +1,4 @@
 import { HumeClient, convertBase64ToBlob } from "hume";
-import { v4 as uuidv4 } from "uuid";
-
 
 class EmotionRecognitionService {
 
@@ -72,6 +70,8 @@ class EmotionRecognitionService {
             // Public URL
             // Add comments & remove console.logs
             // Hide API key
+
+            
             
         } catch (error) {
             console.error("Error processing image", error);
