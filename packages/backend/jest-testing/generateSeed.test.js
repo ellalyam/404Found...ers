@@ -20,12 +20,12 @@ test("Finds correct score for a given emotion string", () => {
 test("Returns object with seed properties", () => {
   const result = generateSeed(emotions);
 
-  expect(result).toHaveProperty("target_danceability");
-  expect(result).toHaveProperty("target_energy");
-  expect(result).toHaveProperty("target_speechiness");
-  expect(result).toHaveProperty("target_valence");
-  expect(typeof result.target_danceability).toBe("number");
-  expect(typeof result.target_energy).toBe("number");
-  expect(typeof result.target_speechiness).toBe("number");
-  expect(typeof result.target_valence).toBe("number");
+  expect(result).toHaveProperty("danceability");
+  expect(result).toHaveProperty("energy");
+  expect(result).toHaveProperty("speechiness");
+  expect(result).toHaveProperty("valence");
+  expect(typeof result.danceability).toBe("number");
+  expect(typeof result.energy).toBe("number");
+  expect(typeof result.speechiness).toBe("number");
+  expect(typeof result.valence).toBe("number");
 });
