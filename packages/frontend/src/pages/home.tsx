@@ -6,6 +6,7 @@ import { SuggestionInterface } from "../components/suggestion";
 import { ComponentMapper } from "../services/componentMapper";
 import "../styling/suggestionComponent.scss";
 import Sidebar from "../components/sidebar";
+import { UserDataService } from "../services/userDataService";
 
 const fakePreviousSuggestions = {
   suggestions: [
@@ -13,7 +14,7 @@ const fakePreviousSuggestions = {
       mood: "Anger",
       name: "1",
       id: "randomId",
-      dateSuggested: "2/24/25",
+      dateSuggested: new Date("2025-02-24"),
       tracks: [
         {
           title: "Master Of Puppets",
@@ -39,7 +40,7 @@ const fakePreviousSuggestions = {
       mood: "Happiness",
       name: "2",
       id: "randomId",
-      dateSuggested: "2/24/25",
+      dateSuggested: new Date("2025-02-24"),
       tracks: [
         {
           title: "What You Know",
@@ -65,7 +66,7 @@ const fakePreviousSuggestions = {
       mood: "Sadness",
       name: "3",
       id: "randomId",
-      dateSuggested: "2/24/25",
+      dateSuggested: new Date("2025-02-24"),
       tracks: [
         {
           title: "Another Love",
@@ -90,6 +91,7 @@ const fakePreviousSuggestions = {
   ],
 };
 
+
 export default function Home() {
   const [previousUserSuggestions, setPreviousUserSuggestions] =
     useState<SuggestionInterface[]>();
@@ -103,16 +105,12 @@ export default function Home() {
       navigate("/");
     }
     const fetchPreviousSuggestions = async () => {
-      //const previousSuggestions =
-      //  await UserDataService.fetchPreviousSuggestions();
-      setPreviousUserSuggestions(fakePreviousSuggestions.suggestions);
+      const previousSuggestions =
+        await UserDataService.fetchPreviousSuggestions();
+      setPreviousUserSuggestions(previousSuggestions.suggestions);
     };
 
-    // const fetchUserAccountData = async () => {
-    //   const userAccountData = await UserDataService.fetchUserAccountData();
-    // };
     fetchPreviousSuggestions();
-    //UserDataService.getUserName
 
     //mapper functions
   });
