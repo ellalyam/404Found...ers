@@ -50,10 +50,10 @@ function generateSeed(emotions) {
   };
 
   return {
-    target_danceability: getMeasure(weights["danceability"], scoreArr),
-    target_energy: getMeasure(weights["energy"], scoreArr),
-    target_speechiness: getMeasure(weights["speechiness"], scoreArr),
-    target_valence: getMeasure(weights["valence"], scoreArr),
+    danceability: getMeasure(weights["danceability"], scoreArr),
+    energy: getMeasure(weights["energy"], scoreArr),
+    speechiness: getMeasure(weights["speechiness"], scoreArr),
+    valence: getMeasure(weights["valence"], scoreArr),
   };
 }
 
