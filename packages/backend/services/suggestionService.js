@@ -1,6 +1,17 @@
 import spotifyServices from "./spotifyServices.js";
 
 /**
+ * Gets emotion with the highest value from emotion JSON (ie most present in facial detection)
+ * @param {JSON} emotion - From Hume (or user form?)
+ */
+function getMainEmotion(emotion) {
+  return emotion.reduce(
+    (max, em) => (em.score > max.score ? em : max),
+    emotion[0],
+  ).name;
+}
+
+/**
   * Gets recommended songs with the given seed and parameters
   * @param  {JSON}    seed        Artist IDs and song parameters
   * @return {Array<String>}       Array of Spotify track IDs
@@ -39,6 +50,6 @@ async function getSuggestions(accessToken, songParams) {
   return responseData;
 }
 
-export default {
-  getSuggestions,
+export {
+  getSuggestions, getMainEmotion
 };
