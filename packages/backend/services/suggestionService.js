@@ -63,6 +63,4 @@ async function getSuggestions(accessToken, songParams) {
   return responseData;
 }
 
-export {
-  getSuggestions, getMainEmotion
-};
+export { getSuggestions };
