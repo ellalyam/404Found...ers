@@ -16,6 +16,7 @@ export default function Login() {
   const code = urlParams.get("code");
   if (!(code === null)) {
     SpotifyLoginService.getAccessToken(code);
+    return;
   }
 
   return (
