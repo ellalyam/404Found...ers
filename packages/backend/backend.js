@@ -1,11 +1,11 @@
 import dotenv from "dotenv";
-
 import express from "express";
 import cors from "cors";
-import generateSeed from "./services/generateSeed.js"
-import mongoServices from "./services/mongoServices.js"
-import suggestionServices from "./services/suggestionService.js";
 import mongoose from "mongoose";
+import { findScore, generateSeed } from "./services/generateSeed.js";
+import { addUser, findUser, removeUser,
+         addSuggestion, findSuggestions } from "./services/mongoServices.js";
+import { getSuggestions } from "./services/suggestionService.js";
 
 dotenv.config();
 
