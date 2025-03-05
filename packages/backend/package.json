@@ -21,7 +21,8 @@
     "backend": "file:",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mongoose": "^8.11.0"
+    "mongoose": "^8.11.0",
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "@eslint/compat": "^1.2.6",
