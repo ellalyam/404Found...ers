@@ -13,8 +13,9 @@ export default function Login() {
   }
 
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has("code")) {
-    SpotifyLoginService.getAccessToken(urlParams.get("code"));
+  const code = urlParams.get("code");
+  if (!(code === null)) {
+    SpotifyLoginService.getAccessToken(code);
   }
 
   return (

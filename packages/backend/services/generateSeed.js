@@ -52,12 +52,14 @@ function generateSeed(emotions) {
   };
 
   return {
-    target_danceability: getMeasure(weights["danceability"], scoreArr),
-    target_energy: getMeasure(weights["energy"], scoreArr),
-    target_speechiness: getMeasure(weights["speechiness"], scoreArr),
-    target_valence: getMeasure(weights["valence"], scoreArr),
+    danceability: getMeasure(weights["danceability"], scoreArr),
+    energy: getMeasure(weights["energy"], scoreArr),
+    speechiness: getMeasure(weights["speechiness"], scoreArr),
+    valence: getMeasure(weights["valence"], scoreArr),
   };
 }
+
+export default generateSeed;
 
 // TEST
 const testEmotions = [
@@ -73,9 +75,9 @@ const testEmotions = [
 
 const result = generateSeed(testEmotions);
 
-assert.ok(result.hasOwnProperty("target_danceability"));
-assert.ok(result.hasOwnProperty("target_energy"));
-assert.ok(result.hasOwnProperty("target_speechiness"));
-assert.ok(result.hasOwnProperty("target_valence"));
+assert.ok(result.hasOwnProperty("danceability"));
+assert.ok(result.hasOwnProperty("energy"));
+assert.ok(result.hasOwnProperty("speechiness"));
+assert.ok(result.hasOwnProperty("valence"));
 
 console.log(result);

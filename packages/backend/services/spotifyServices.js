@@ -1,9 +1,7 @@
-import express from "express";
-import cors from "cors";
-
 /**
  * Gets the Spotify user ID of a user
- * @param {String} accessToken
+ * @param   {String}  accessToken Spotify user's API access token
+ * @return  {String}              Spotify user's ID
  */
 async function getUserId(accessToken) {
   const url = "https://api.spotify.com/v1/me";
@@ -23,27 +21,28 @@ async function getUserId(accessToken) {
 }
 
 /**
- * Gets the top n artists of a Spotify user
- * @param {String} accessToken
+ * Gets the top n tracks of a Spotify user
+ * @param   {String}        accessToken Spotify user's API access token
+ * @param   {Number}        count       The maximum number of returned tracks
+ * @return  {Array<String>}             Array of Spotify track IDs
  */
-async function getTopArtists(accessToken) {
-  const url = "https://api.spotify.com/v1/me/top/artists";
+async function getUserTopTracks(accessToken, count) {
+  const url = "https://api.spotify.com/v1/me/top/tracks?";
 
-  const response = await fetch(url, {
+  const response = await fetch(url + new URLSearchParams({
+    type: "tracks",
+    time_range: "medium_term",
+    limit: count,
+  }), {
     headers: {
       Authorization: "Bearer " + accessToken,
     },
-    body: new URLSearchParams({
-      type: "artists",
-      time_range: "medium_term",
-      limit: count,
-    }),
   });
 
-  const userData = await response.json();
+  const responseData = await response.json();
+  return responseData.items.map((item) => item.id);
+}
 
-  if (userData.error) {
-    return -1;
-  }
-  return userData.items;
+export default {
+  getUserId, getUserTopTracks
 }

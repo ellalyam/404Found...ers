@@ -73,16 +73,19 @@ class EmotionRecognitionService {
         console.log("not working");
       }
 
-      // TO DO:
-      // Send to backend
-      // Add comments & remove console.logs
-      // Hide API key
-      // 2 jobs?
-      // Figure out why webcam doesn't always work (it's like it just gets cut off)
-    } catch (error) {
-      console.error("Error processing image", error);
+            // TO DO:
+            // Send to backend
+            // Public URL
+            // Add comments & remove console.logs
+            // Hide API key
+
+            
+            
+        } catch (error) {
+            console.error("Error processing image", error);
+        }
+
     }
   }
-}
 
 export default EmotionRecognitionService;

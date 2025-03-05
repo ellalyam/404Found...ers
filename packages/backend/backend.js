@@ -1,10 +1,20 @@
 import dotenv from "dotenv";
-import generateSeed from "./services/generateSeed.js";
-import mongoServices from "./services/mongoServices.js";
+
+import express from "express";
+import cors from "cors";
+import generateSeed from "./services/generateSeed.js"
+import mongoServices from "./services/mongoServices.js"
 import suggestionServices from "./services/suggestionService.js";
-import fileSystem from "./services/fileSystem.js";
+import mongoose from "mongoose";
 
 dotenv.config();
+
+const { MONGO_CONNECTION_STRING } = process.env;
+
+mongoose.set("debug", true);
+mongoose
+  .connect(MONGO_CONNECTION_STRING + "users") // connect to Db "users"
+  .catch((error) => console.log(error));
 
 const app = express();
 const port = 8000;
@@ -12,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/new-suggestion", (req, res) => {
+  const spotifyToken = req.query.spotify_token;
   const emotions =
     req.query.source.results.predictions.file.models.face.grouped_predictions.id
       .predictions.emotions;
@@ -19,7 +30,7 @@ app.get("/new-suggestion", (req, res) => {
 
   // Send seed to spotify API
   suggestionServices
-    .getSuggestions(seed)
+    .getSuggestions(spotifyToken, seed)
     .then((suggestion) => {
       return mongoServices.addSuggestion(suggestion).then(() => suggestion);
     })
@@ -30,7 +41,9 @@ app.get("/new-suggestion", (req, res) => {
 app.get("/suggestions/:id", (req, res) => {
   const id = req.params["id"];
 
-  mongoServices.findSuggestions(id).then((result) => res.send(result));
+  mongoServices
+    .findSuggestions(id)
+    .then((result) => res.send(result));
 });
 
 // Get user info from Spotify and send to frontend
@@ -49,6 +62,6 @@ app.delete("/user/:id", (req, res) => {
     .then((_) => res.status(204).send(`Deleted user with id: ${id}`));
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.listen(process.env.PORT || port, () => {
+  console.log("REST API is listening.");
 });
