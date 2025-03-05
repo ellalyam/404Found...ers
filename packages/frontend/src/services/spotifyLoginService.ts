@@ -1,9 +1,11 @@
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
-const redirectUri: string = "http://localhost:5173";
+// const redirectUri: string = "http://localhost:5173";
+const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
 
 export class SpotifyLoginService {
   public static async logUserIn() {
-    const redirectUri = "http://localhost:5173";
+    // const redirectUri = "http://localhost:5173";
+    const redirectUri = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
     const scope = "user-top-read";
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -56,12 +58,12 @@ export class SpotifyLoginService {
       }),
     };
 
+    localStorage.setItem("isLoggedIn", "true");
     const body = await fetch(url, payload);
     const response = await body.json();
 
     localStorage.setItem("spotify_access_token", response.access_token);
     localStorage.setItem("spotify_refresh_token", response.refresh_token);
-    localStorage.setItem("isLoggedIn", "true");
   }
 
   public static async refreshAccessToken() {

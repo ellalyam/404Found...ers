@@ -12,33 +12,57 @@ export default function Suggestion() {
   const [isCaptureEnable, setCaptureEnable] = useState(true);
   // const [url, setUrl] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
+  const [screenshotCaptured, setScreenshotCaptured] = useState(false);
 
   // Captures screenshots from webcam
-  const capture = useCallback(() => {
+  const capture = useCallback(async () => {
+    console.log("start capture");
+
+    if (screenshotCaptured)
+      return;
+
+    // Captures screenshot
     const imageSrc = webcamRef.current?.getScreenshot();
+    
+    // TO-DO:
+    // Convert image to public url
 
     if (imageSrc) {
       // setUrl(imageSrc);
-      emotionRecognitionService.identifyEmotion(imageSrc); // Sends image --> sent to Hume.ai
+      console.log(imageSrc);
+
+      //emotionRecognitionService.uploadBase64Image(imageSrc);
+      
+      // Using online image with public URL for now to test API
+      emotionRecognitionService.identifyEmotion(imageSrc)
+
+      //emotionRecognitionService.identifyEmotion(imageSrc);
+      setScreenshotCaptured(true);
     }
-  }, [webcamRef]);
+  }, [webcamRef, screenshotCaptured]);
 
   // Starts webcam for 3 seconds
   const startWebcam = () => {
-    setCaptureEnable(true);
+    console.log("start webcam");
 
+    // Captures image 1.5 seconds into webcam being open
+    setTimeout(() => {
+      console.log("create capture");
+      capture();
+    }, 1500);
+
+    // Turns camera off after 3 seconds
     setTimeout(() => {
       setCaptureEnable(false);
-      capture();
     }, 3000);
   };
 
-  // USE useEffect TO RUN startWebcam
-  useEffect(() => {
-    if (isCaptureEnable) {
-      startWebcam();
-    }
-  }, []);
+  // Use useEffect to run startWebcam()...???
+  //useEffect(() => {
+  if (isCaptureEnable) {
+    startWebcam();
+  }
+  //}, []);
 
   return (
     <div className="webcam">

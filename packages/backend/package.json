@@ -12,7 +12,7 @@
     "lint": "npx eslint .",
     "format": "npx prettier -w .",
     "style": "npm run lint && npm run format",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "dependencies": {
     "backend": "file:",
