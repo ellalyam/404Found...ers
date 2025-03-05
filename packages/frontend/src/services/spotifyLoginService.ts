@@ -32,8 +32,6 @@ export class SpotifyLoginService {
 
     // send user to the Spotify authorization page
     window.location.href = authUrl.toString();
-
-    return 3;
   }
 
   public static async getAccessToken(code: string) {

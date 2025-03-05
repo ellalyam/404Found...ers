@@ -11,6 +11,7 @@ function addUser(user) {
     return promise
 }
 
+
 /**
  * Finds an existing user in the DB, if user w/ spotifyID DNE in Mongo, Add user instance and return 
  * @param {number} spotifyId - Spotify ID associated with a user
