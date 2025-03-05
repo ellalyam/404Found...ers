@@ -10,6 +10,7 @@ const fakeAccountData = {
 };
 
 import { UserDataService } from "../services/userDataService";
+import { SpotifyLoginService } from "../services/spotifyLoginService";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Sidebar() {
       navigate("/");
     }
     const fetchUserAccountData = async () => {
-      const fetchedUserAccountData = await UserDataService.fetchUserAccountData();
+      const fetchedUserAccountData = await SpotifyLoginService.getUserProfile();
       setUserAccountData(fetchedUserAccountData);
     };
     fetchUserAccountData();

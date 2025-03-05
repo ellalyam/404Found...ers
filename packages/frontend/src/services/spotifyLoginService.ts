@@ -2,7 +2,7 @@ const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
 const redirectUri: string = "http://localhost:5173";
 
 export class SpotifyLoginService {
-  public static async logUserIn(): Promise<number> {
+  public static async logUserIn() {
     const redirectUri = "http://localhost:5173";
     const scope = "user-top-read";
     const authUrl = new URL("https://accounts.spotify.com/authorize");

@@ -206,20 +206,6 @@ app.get("/suggestions/:token", (req, res) => {
   res.status(200).send(fakePreviousSuggestions);
 });
 
-// Get user info from Spotify and send to frontend
-app.get("/user/:token", (req, res) => {
-  const token = req.params["token"];
-
-  const fakeUserData = {
-    username: "backend response",
-    userProfileImage: "/olivia_rodrigo.png"
-  }
-
-  res.status(200).send(fakeUserData);
-
-  // TODO: Request profile picture and username from spotify, send to frontend
-});
-
 // Delete user from DB
 app.delete("/user/:id", (req, res) => {
   const id = req.params["id"];
