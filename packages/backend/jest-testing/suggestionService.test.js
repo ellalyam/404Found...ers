@@ -1,5 +1,4 @@
 import { test, expect } from "@jest/globals";
-import { getMainEmotion } from "../services/suggestionService.js";
 
 const emotions = [
   { name: "Anger", score: 0.1 },
