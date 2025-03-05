@@ -79,11 +79,11 @@ class EmotionRecognitionService {
             // Add comments & remove console.logs
             // Hide API key
 
+        
             
-            
-        } catch (error) {
-            console.error("Error processing image", error);
-        }
+    } catch (error) {
+        console.error("Error processing image", error);
+    }
 
     }
   }
