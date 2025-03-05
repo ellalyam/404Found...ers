@@ -1,6 +1,4 @@
 import { HumeClient, convertBase64ToBlob } from "hume";
-import { v4 as uuidv4 } from "uuid";
-
 
 class EmotionRecognitionService {
 
