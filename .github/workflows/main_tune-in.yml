@@ -75,5 +75,5 @@ jobs:
         with:
           app-name: 'Tune-In'
           slot-name: 'Production'
-          package: .
+          package: release.zip
           
