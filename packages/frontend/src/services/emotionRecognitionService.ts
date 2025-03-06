@@ -1,4 +1,5 @@
-import { HumeClient, convertBase64ToBlob } from "hume";
+import { HumeClient } from "hume";
+import { Blob } from "buffer";
 
 class EmotionRecognitionService {
   // Receives images and sends to Hume for analysis
@@ -42,7 +43,8 @@ class EmotionRecognitionService {
       console.log("Processing image");
       console.log(imageSrc);
       const base64String = imageSrc.replace(/^data:image\/\w+;base64,/, "");
-      const blobFile = convertBase64ToBlob(base64String);
+      const blobFile = EmotionRecognitionService
+        .base64ImageToBlob(base64String);
       console.log(blobFile);
       // Send to Hume.ai
       const response =
@@ -73,19 +75,30 @@ class EmotionRecognitionService {
         console.log("not working");
       }
 
-            // TO DO:
+            // TODO:
             // Send to backend
             // Public URL
             // Add comments & remove console.logs
             // Hide API key
 
-        
-            
     } catch (error) {
         console.error("Error processing image", error);
     }
-
-    }
   }
+
+  // convert a base64-encoded image to a blob
+  private static base64ImageToBlob(base64String: string): Blob {
+    const binaryString = window.atob(base64String);
+    const len = binaryString.length;
+
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type: "image/jpeg" });
+  }
+}
 
 export default EmotionRecognitionService;

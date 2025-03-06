@@ -108,7 +108,9 @@ export default function Home() {
     const fetchPreviousSuggestions = async () => {
       const previousSuggestions =
         await UserDataService.fetchPreviousSuggestions();
-      setPreviousUserSuggestions(previousSuggestions.suggestions);
+      if (previousSuggestions) {
+        setPreviousUserSuggestions(previousSuggestions);
+      }
     };
 
     fetchPreviousSuggestions();
