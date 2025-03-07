@@ -31,7 +31,7 @@ jobs:
         working-directory: packages/backend
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -ry
+        run: zip release.zip ./* ./dist
         working-directory: packages/backend
 
       - name: Upload artifact for deployment job
@@ -76,4 +76,4 @@ jobs:
           app-name: 'Tune-In'
           slot-name: 'Production'
           package: release.zip
-          
+
