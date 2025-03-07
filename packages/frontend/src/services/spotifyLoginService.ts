@@ -1,7 +1,7 @@
 import { UserInterface } from "./userDataService.ts";
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
-const redirectUri: string = "http://localhost:5173";
-//const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
+//const redirectUri: string = "http://localhost:5173";
+const redirectUri: string = "https://victorious-dune-0b89af71e.6.azurestaticapps.net";
 
 export class SpotifyLoginService {
   public static async logUserIn() {
