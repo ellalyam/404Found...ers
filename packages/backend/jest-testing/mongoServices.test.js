@@ -28,8 +28,12 @@ test("Returns a user from the DB", async () => {
 
 test("If a user is not in the DB, create new user & return", async () => {
   const user = { spotifyId: "abc123", suggestions: [] };
+  jest.spyOn(User, "findById").mockResolvedValue(null);
+  jest.spyOn(User.prototype, "save").mockResolvedValue(user);
   const result = await findUser("abc123");
 
+  expect(User.findById).toHaveBeenCalledWith("abc123");
+  expect(User.prototype.save).toHaveBeenCalled();
   expect(result).toEqual(user);
 });
 
@@ -59,15 +63,27 @@ test("Deletes users suggestions and then deletes user", async () => {
   expect(result).toEqual(deleteRes);
 });
 
-// test("Saves new suggestion", async () => {
-//   const suggestion = {
-//     text: "This is a song you should listen to because you are very sad",
-//     user: "abc123",
-//   };
-//   const suggestionObj = { ...suggestion };
-//   jest.spyOn(Suggestion.prototype, "save").mockResolvedValue(suggestionObj);
-//   const result = await addSuggestion(suggestion);
+test("Saves new suggestion", async () => {
+  const user = {
+    spotifyId: "abc123",
+    suggestions: [],
+    save: jest.fn().mockResolvedValue(true),
+  };
 
-//   expect(result).toEqual(suggestionObj);
-//   expect(Suggestion.prototype.save).toHaveBeenCalled();
-// });
+  jest.spyOn(User, "findById").mockResolvedValue(user);
+
+  const suggestion = {
+    mood: "This is a song you should listen to because you are very sad",
+    name: "name",
+    id: "suggestion1",
+    dateSuggested: new Date(),
+    tracks: ["1", "2", "3"],
+  };
+
+  const suggestionObj = { ...suggestion };
+  jest.spyOn(Suggestion.prototype, "save").mockResolvedValue(suggestionObj);
+  const result = await addSuggestion(suggestion, "abc123");
+
+  expect(result).toEqual(suggestionObj);
+  expect(Suggestion.prototype.save).toHaveBeenCalled();
+});

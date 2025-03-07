@@ -2,10 +2,8 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { findScore, generateSeed } from "./services/generateSeed.js";
-import { addUser, findUser, removeUser,
-         addSuggestion, findSuggestions } from "./services/mongoServices.js";
-import { getSuggestions } from "./services/suggestionService.js";
+import { generateSeed } from "./services/generateSeed.js";
+import { getMainEmotion } from "./services/suggestionService.js";
 
 dotenv.config();
 
@@ -21,18 +19,17 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
-
-
 app.get("/new-suggestion", (req, res) => {
   const spotifyToken = req.query.spotify_token;
   const emotions =
     req.query.source.results.predictions.file.models.face.grouped_predictions.id
       .predictions.emotions;
   const seed = generateSeed(emotions);
+  const mainEmotion = getMainEmotion(emotions);
 
   // Send seed to spotify API
   suggestionServices
-    .getSuggestions(spotifyToken, seed)
+    .getSuggestions(spotifyToken, seed, mainEmotion)
     .then((suggestion) => {
       return mongoServices.addSuggestion(suggestion).then(() => suggestion);
     })
@@ -127,9 +124,7 @@ app.get("/suggestions/:id", (req, res) => {
   const token = req.headers.token;
   const id = getUserId(token);
 
-  mongoServices
-    .findSuggestions(id)
-    .then((result) => res.send(result));
+  mongoServices.findSuggestions(id).then((result) => res.send(result));
 });
 
 // Delete user from DB
