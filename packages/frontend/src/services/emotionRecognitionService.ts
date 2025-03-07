@@ -1,5 +1,9 @@
+import dotenv from "dotenv";
 import { HumeClient } from "hume";
 import { Blob } from "buffer";
+
+dotenv.config();
+const { HUMEAI_API_KEY } = process.env;
 
 class EmotionRecognitionService {
   // Receives images and sends to Hume for analysis
@@ -7,7 +11,7 @@ class EmotionRecognitionService {
     try {
       // Connect to Hume.ai
       const client = new HumeClient({
-        apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR",
+        apiKey: HUMEAI_API_KEY,
       });
       console.log("Create client");
 
@@ -43,9 +47,9 @@ class EmotionRecognitionService {
       console.log("Processing image");
       console.log(imageSrc);
       const base64String = imageSrc.replace(/^data:image\/\w+;base64,/, "");
-      const blobFile = EmotionRecognitionService
-        .base64ImageToBlob(base64String);
+      const blobFile = EmotionRecognitionService.base64ImageToBlob(base64String);
       console.log(blobFile);
+
       // Send to Hume.ai
       const response =
         await client.expressionMeasurement.batch.startInferenceJobFromLocalFile(
@@ -69,7 +73,10 @@ class EmotionRecognitionService {
             await client.expressionMeasurement.batch.getJobPredictions(
               response.jobId,
             );
+
           console.log("Response: ", result);
+
+          // send to backend
         }
       } else {
         console.log("not working");
@@ -77,7 +84,6 @@ class EmotionRecognitionService {
 
             // TODO:
             // Send to backend
-            // Public URL
             // Add comments & remove console.logs
             // Hide API key
 
