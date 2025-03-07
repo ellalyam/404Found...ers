@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 import { HumeClient } from "hume";
 import { Blob } from "buffer";
 
-dotenv.config();
-const { HUMEAI_API_KEY } = process.env;
+//dotenv.config();
+//const { HUMEAI_API_KEY } = process.env;
 
 class EmotionRecognitionService {
   // Receives images and sends to Hume for analysis
@@ -11,7 +11,7 @@ class EmotionRecognitionService {
     try {
       // Connect to Hume.ai
       const client = new HumeClient({
-        apiKey: HUMEAI_API_KEY,
+        apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR",
       });
       console.log("Create client");
 
