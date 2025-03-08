@@ -60,6 +60,21 @@ class EmotionRecognitionService {
                     // Get job predictions (JSON)
                     const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
                     console.log("Response: ", result);
+                
+                    const promise = fetch("https://victorious-dune-0b89af71e.6.azurestaticapps.net/new-suggestion", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body : JSON.stringify(result)
+                    });
+                    return promise.then((res) => {
+                        if (res.status === 201) {
+                          return res.json();
+                        } else {
+                          throw new Error("Failed to send JSON.")
+                        }
+                      });
                 }
             } else {
                 console.log("not working");
