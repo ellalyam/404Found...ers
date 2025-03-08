@@ -1,59 +1,70 @@
-import { HumeClient, convertBase64ToBlob } from "hume";
+//import dotenv from "dotenv";
+import { HumeClient } from "hume";
+import { Blob } from "buffer";
+
+//dotenv.config();
+//const { HUMEAI_API_KEY } = process.env;
 
 class EmotionRecognitionService {
+  // Receives images and sends to Hume for analysis
+  public static async identifyEmotion(imageSrc: string): Promise<void> {
+    try {
+      // Connect to Hume.ai
+      const client = new HumeClient({
+        apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR",
+      });
+      console.log("Create client");
 
-    // Receives images and sends to Hume for analysis
-    public static async identifyEmotion(imageSrc: string): Promise<void> {
-        try {
-            // Connect to Hume.ai
-            const client = new HumeClient({ apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR" });
-            console.log("Create client");
-
-            // Used to poll job until complete
-            const checkJobStatus = async (jobId: string) => {
-                while (true) {
-                    // Gets job details (including status)                   
-                    const waiting = await client.expressionMeasurement.batch.getJobDetails(response.jobId);
-                    console.log("Got job details");
-                  
-                    // Determines status
-                    // Returns json if completed
-                    // Returns nothing/raises error if failed
-                    // Keeps looping if job is still in progress
-                    if (waiting.state.status === "COMPLETED") {
-                        console.log("Job complete", waiting);
-                        return waiting;
-                    } else if(waiting.state.status === "IN_PROGRESS") {
-                        console.log("Job still working", waiting);
-                    } else if (waiting.state.status === "FAILED") {
-                        console.error("Job failed.");
-                        return;
-                    }
-                
-                    // Repolls every 3 seconds
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                }
-            };
-            
-            console.log("Processing image");
-            console.log(imageSrc);
-            const base64String = imageSrc.replace(/^data:image\/\w+;base64,/, ""); 
-            const blobFile = convertBase64ToBlob(base64String);
-            console.log(blobFile);
-            // Send to Hume.ai
-            const response = await client.expressionMeasurement.batch.startInferenceJobFromLocalFile(
-                [blobFile],
-                {}
+      // Used to poll job until complete
+      const checkJobStatus = async (jobId: string) => {
+        while (true) {
+          // Gets job details (including status)
+          const waiting =
+            await client.expressionMeasurement.batch.getJobDetails(
+              jobId,
             );
-            console.log(response);
-            console.log(response.jobId);
+          console.log("Got job details");
 
-            // Validates job
-            if(response) {
-                console.log("working");
-                
-                // Call to poll job status
-                const checking = await checkJobStatus(response.jobId);
+          // Determines status
+          // Returns json if completed
+          // Returns nothing/raises error if failed
+          // Keeps looping if job is still in progress
+          if (waiting.state.status === "COMPLETED") {
+            console.log("Job complete", waiting);
+            return waiting;
+          } else if (waiting.state.status === "IN_PROGRESS") {
+            console.log("Job still working", waiting);
+          } else if (waiting.state.status === "FAILED") {
+            console.error("Job failed.");
+            return;
+          }
+
+          // Repolls every 3 seconds
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+        }
+      };
+
+      console.log("Processing image");
+      console.log(imageSrc);
+      const base64String = imageSrc.replace(/^data:image\/\w+;base64,/, "");
+      const blobFile = EmotionRecognitionService.base64ImageToBlob(base64String);
+      console.log(blobFile);
+
+      // Send to Hume.ai
+      const response =
+        await client.expressionMeasurement.batch.startInferenceJobFromLocalFile(
+          [blobFile],
+          {},
+        );
+      console.log(response);
+      console.log(response.jobId);
+
+      // Validates job
+      if (response) {
+        console.log("working");
+
+        // Call to poll job status
+        const checking = await checkJobStatus(response.jobId);
 
                 // Validates that job is complete
                 if(checking) {
@@ -80,17 +91,29 @@ class EmotionRecognitionService {
                 console.log("not working");
             }
 
-            // TO DO:
+            // TODO:
             // Send to backend
-            // Public URL
             // Add comments & remove console.logs
             // Hide API key
-            
-        } catch (error) {
-            console.error("Error processing image", error);
-        }
 
+    } catch (error) {
+        console.error("Error processing image", error);
     }
   }
+
+  // convert a base64-encoded image to a blob
+  private static base64ImageToBlob(base64String: string): Blob {
+    const binaryString = window.atob(base64String);
+    const len = binaryString.length;
+
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type: "image/jpeg" });
+  }
+}
 
 export default EmotionRecognitionService;

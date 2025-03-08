@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import emotionRecognitionService from "../services/emotionRecognitionService";
 import Webcam from "react-webcam";
 
@@ -32,12 +32,9 @@ export default function Suggestion() {
       console.log(imageSrc);
 
       //emotionRecognitionService.uploadBase64Image(imageSrc);
-      
+      setScreenshotCaptured(true);
       // Using online image with public URL for now to test API
       emotionRecognitionService.identifyEmotion(imageSrc)
-
-      //emotionRecognitionService.identifyEmotion(imageSrc);
-      setScreenshotCaptured(true);
     }
   }, [webcamRef, screenshotCaptured]);
 
@@ -57,12 +54,9 @@ export default function Suggestion() {
     }, 3000);
   };
 
-  // Use useEffect to run startWebcam()...???
-  //useEffect(() => {
   if (isCaptureEnable) {
     startWebcam();
   }
-  //}, []);
 
   return (
     <div className="webcam">

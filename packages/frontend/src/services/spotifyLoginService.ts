@@ -1,9 +1,10 @@
+import { UserInterface } from "./userDataService.ts";
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
 //const redirectUri: string = "http://localhost:5173";
-const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
+const redirectUri: string = "https://victorious-dune-0b89af71e.6.azurestaticapps.net";
 
 export class SpotifyLoginService {
-  public static async logUserIn(): Promise<number> {
+  public static async logUserIn() {
     const scope = "user-top-read";
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -94,7 +95,7 @@ export class SpotifyLoginService {
     }
   }
 
-  public static async getUserProfile(): Promise<string> {
+  public static async getUserProfile(): Promise<UserInterface> {
     const accessToken = localStorage.getItem("spotify_access_token");
     const url = "https://api.spotify.com/v1/me";
 
@@ -107,9 +108,10 @@ export class SpotifyLoginService {
     const userData = await response.json();
 
     return {
-      username: userData.display_name,
       userProfileImage: (userData.images.length === 0)
                           ? "/default_user.png" : userData.images[0].url,
+      username: userData.display_name,
+      spotifyUserId: userData.id,
     };
   }
 

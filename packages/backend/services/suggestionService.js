@@ -31,7 +31,7 @@ async function getRecommendedTracks(seed) {
   const responseData = await response.json();
   const outputData = {
     mood: getMainEmotion(seed),
-    dateSuggested: new Date().toLocaleDateString(),
+    dateSuggested: new Date(),
     tracks: responseData.content.map((track) => {
       return {
         title: track.trackTitle,

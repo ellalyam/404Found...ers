@@ -1,7 +1,8 @@
 import { SuggestionInterface } from "../components/suggestion";
 
 export class UserDataService {
-  public static async fetchPreviousSuggestions(): Promise<any> {
+  public static async fetchPreviousSuggestions()
+                      : Promise<SuggestionInterface[] | undefined> {
     const access_token = localStorage.getItem("spotify_access_token");
 
     try {
@@ -15,7 +16,7 @@ export class UserDataService {
     }
   }
 
-  public static async deleteUser(): Promise<any> {
+  public static async deleteUser(): Promise<JSON | undefined> {
     const access_token = localStorage.getItem("spotify_access_token");
     try {
       const response = await fetch(`http://localhost:8000/user/${access_token}`, {method: 'DELETE'});

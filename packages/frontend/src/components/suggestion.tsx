@@ -34,7 +34,7 @@ const Suggestion: React.FC<SuggestionInterface> = ({
 
   useEffect(() => {
     setSuggestedTracks(tracks);
-  }, []);
+  }, [tracks]);
   return (
     <div
       id={id}
