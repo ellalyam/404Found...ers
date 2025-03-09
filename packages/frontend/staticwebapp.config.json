@@ -1,20 +1,7 @@
 {
   "trailingSlash": "auto",
-  "routes": [
-    {
-      "route": "/home",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/suggestion",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/login",
-      "allowedRoles": ["anonymous"]
-    }
-  ],
   "navigationFallback": {
-    "rewrite": "/home"
+    "rewrite": "index.html",
+    "exclude": ["/images/*.{png,jpg,gif,ico}", "/*.{css,js}"]
   }
 }
