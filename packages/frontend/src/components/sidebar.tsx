@@ -5,7 +5,7 @@ import { UserInterface } from "../services/userDataService";
 
 /*
  *const fakeAccountData = {
- *  userProfileImage: "/olivia_rodrigo.png",
+ *  userProfileImage: "/images/olivia_rodrigo.png",
  *  username: "Olivia Rodrigo",
  *  spotifyUserId: "abc123def456ghi789",
  *};
@@ -19,7 +19,7 @@ export default function Sidebar() {
 
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const [userAccountData, setUserAccountData] = useState<UserInterface>({
-    userProfileImage: "/default_user.png",
+    userProfileImage: "/images/default_user.png",
     username: "Fetching Username...",
     spotifyUserId: "userid",
   });

@@ -109,7 +109,7 @@ export class SpotifyLoginService {
 
     return {
       userProfileImage: (userData.images.length === 0)
-                          ? "/default_user.png" : userData.images[0].url,
+                          ? "/images/default_user.png" : userData.images[0].url,
       username: userData.display_name,
       spotifyUserId: userData.id,
     };
