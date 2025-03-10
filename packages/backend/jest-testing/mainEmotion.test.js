@@ -1,7 +1,7 @@
 import { test, expect } from "@jest/globals";
 import { getMainEmotion } from "../services/mainEmotion";
 
-test("Placeholder so tests run", async () => {
+test("Gets emotion with highest score", async () => {
   const emotions = [
     { name: "Anger", score: 0.1 },
     { name: "Anxiety", score: 0.2 },
