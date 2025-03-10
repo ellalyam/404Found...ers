@@ -1,4 +1,4 @@
-import spotifyServices from "./spotifyServices.js";
+import { getUserTopTracks } from "./spotifyServices.js";
 
 /**
  * Gets emotion with the highest value from emotion JSON (ie most present in facial detection)
