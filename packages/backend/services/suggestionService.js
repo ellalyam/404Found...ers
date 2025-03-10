@@ -1,4 +1,4 @@
-import spotifyServices from "./spotifyServices.js";
+import { getUserTopTracks } from "./spotifyServices.js";
 
 /**
  * Gets recommended songs with the given seed and parameters
@@ -47,7 +47,7 @@ async function getRecommendedTracks(seed, mainEmotion) {
 async function getSuggestions(accessToken, songParams, mainEmotion) {
   // Get user's top tracks and add to seed
   const seed = {
-    seeds: await spotifyServices.getUserTopTracks(accessToken, 5),
+    seeds: await getUserTopTracks(accessToken, 5),
     ...songParams,
   };
 
@@ -56,4 +56,4 @@ async function getSuggestions(accessToken, songParams, mainEmotion) {
   return responseData;
 }
 
-export { getSuggestions };
+export { getSuggestions, getRecommendedTracks };
