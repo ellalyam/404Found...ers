@@ -31,15 +31,9 @@
     "eslint-plugin-react": "^7.37.4",
     "nodemon": "^3.1.9",
     "prettier": "^3.5.1",
-    "vite": "^6.1.0"
+    "rollup": "^4.34.8"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "hume": "^0.9.10",
-    "react-router-dom": "^7.2.0",
-    "react-webcam": "^7.2.0",
-    "sass": "^1.84.0",
-    "scss": "^0.2.4",
     "uuid": "^11.1.0"
   }
 }

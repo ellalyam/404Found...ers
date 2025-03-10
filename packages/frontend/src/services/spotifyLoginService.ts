@@ -1,11 +1,9 @@
+import { UserInterface } from "./userDataService.ts";
+import { frontendUri } from "./uriService.ts";
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
-// const redirectUri: string = "http://localhost:5173";
-const redirectUri: string = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
 
 export class SpotifyLoginService {
-  public static async logUserIn(): Promise<number> {
-    // const redirectUri = "http://localhost:5173";
-    const redirectUri = "tune-in-dvgxbqesgcg5gqgv.westus-01.azurewebsites.net";
+  public static async logUserIn() {
     const scope = "user-top-read";
     const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -26,7 +24,7 @@ export class SpotifyLoginService {
       scope,
       code_challenge_method: "S256",
       code_challenge: authChallenge,
-      redirect_uri: redirectUri,
+      redirect_uri: frontendUri,
     };
 
     // send authorization request
@@ -34,8 +32,6 @@ export class SpotifyLoginService {
 
     // send user to the Spotify authorization page
     window.location.href = authUrl.toString();
-
-    return 3;
   }
 
   public static async getAccessToken(code: string) {
@@ -55,7 +51,7 @@ export class SpotifyLoginService {
         client_id: clientId,
         grant_type: "authorization_code",
         code,
-        redirect_uri: redirectUri,
+        redirect_uri: frontendUri,
         code_verifier: authVerifier,
       }),
     };
@@ -66,6 +62,11 @@ export class SpotifyLoginService {
 
     localStorage.setItem("spotify_access_token", response.access_token);
     localStorage.setItem("spotify_refresh_token", response.refresh_token);
+    
+    const userData = await SpotifyLoginService.getUserProfile();
+    localStorage.setItem("spotify_id", userData.spotifyUserId);
+
+    document.location = "home";
   }
 
   public static async refreshAccessToken() {
@@ -98,7 +99,7 @@ export class SpotifyLoginService {
     }
   }
 
-  public static async getUsername(): Promise<string> {
+  public static async getUserProfile(): Promise<UserInterface> {
     const accessToken = localStorage.getItem("spotify_access_token");
     const url = "https://api.spotify.com/v1/me";
 
@@ -110,10 +111,12 @@ export class SpotifyLoginService {
 
     const userData = await response.json();
 
-    if (userData.error) {
-      return "";
-    }
-    return userData.display_name;
+    return {
+      userProfileImage: (userData.images.length === 0)
+                          ? "/images/default_user.png" : userData.images[0].url,
+      username: userData.display_name,
+      spotifyUserId: userData.id,
+    };
   }
 
   private static generateRandomStr(length: number): string {

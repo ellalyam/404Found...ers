@@ -1,2 +1,4 @@
 node_modules/
 packages/backend/.env
+packages/backend/coverage/
+packages/frontend/.env

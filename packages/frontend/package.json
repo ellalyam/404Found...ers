@@ -16,7 +16,12 @@
     "frontend": "file:",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sass": "^1.85.0"
+    "react-router-dom": "^7.2.0",
+    "react-webcam": "^7.2.0",
+    "hume": "^0.9.10",
+    "mongoose": "^8.10.1",
+    "sass": "^1.85.0",
+    "scss": "^0.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

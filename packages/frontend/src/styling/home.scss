@@ -1,5 +1,6 @@
 $color-start: rgb(50, 2, 74);
 $color-end: black;
+$hover-color: rgb(55, 3, 81);
 
 @mixin container {
   display: flex;
@@ -31,6 +32,11 @@ $color-end: black;
   align-items: center;
   padding: 10px 0;
   width: 100%;
+  cursor: pointer;
+}
+
+.accountInfo:hover {
+  background-color: $hover-color;
 }
 
 .accountInfo > * {
@@ -52,6 +58,11 @@ $color-end: black;
   border: 1px solid white;
   border-radius: 2px;
   color: white;
+  cursor:pointer;
+}
+
+.sidebarButton:hover {
+  background-color: $hover-color;
 }
 
 .homePageBody {

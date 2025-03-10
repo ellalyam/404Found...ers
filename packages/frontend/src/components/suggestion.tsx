@@ -11,7 +11,7 @@ export interface SuggestionInterface {
   mood: string;
   name: string;
   id: string;
-  dateSuggested: string;
+  dateSuggested: Date;
   tracks: {
     title: string;
     album: string;
@@ -34,7 +34,7 @@ const Suggestion: React.FC<SuggestionInterface> = ({
 
   useEffect(() => {
     setSuggestedTracks(tracks);
-  }, []);
+  }, [tracks]);
   return (
     <div
       id={id}
@@ -53,7 +53,9 @@ const Suggestion: React.FC<SuggestionInterface> = ({
           {trackString}
         </h2>
         <h2 id="date" className="suggestionElement">
-          {dateSuggested}
+          {
+            `${String(dateSuggested.getMonth() + 1).padStart(2, "0")}/${String(dateSuggested.getDate()).padStart(2, "0")}/${String(dateSuggested.getFullYear()).slice(-2)}`
+          }
         </h2>
       </div>
       <div className="trackContainer">
