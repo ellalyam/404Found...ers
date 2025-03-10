@@ -1,6 +1,10 @@
 //import dotenv from "dotenv";
 import { HumeClient } from "hume";
 import { Blob } from "buffer";
+// NOTE: the above import is necessary to pass the type checker, but the service
+// doesn't actually work unless you remove it. This will be a non-issue once
+// the API call is done from the backend.
+import { backendUri } from "./uriService.ts";
 
 //dotenv.config();
 //const { HUMEAI_API_KEY } = process.env;
@@ -71,8 +75,9 @@ class EmotionRecognitionService {
                     // Get job predictions (JSON)
                     const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
                     console.log("Response: ", result);
-                
-                    const promise = fetch("https://victorious-dune-0b89af71e.6.azurestaticapps.net/new-suggestion", {
+
+                    const spotifyId = localStorage.getItem("spotify_id");
+                    const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -103,6 +108,10 @@ class EmotionRecognitionService {
 
   // convert a base64-encoded image to a blob
   private static base64ImageToBlob(base64String: string): Blob {
+    // TODO move to frontend. The Blob type that Hume expects is not usable
+    // in frontend code. When this gets moved to the backend, use
+    //   import { Blob } from "node:buffer";
+    // to get the Blob type we need.
     const binaryString = window.atob(base64String);
     const len = binaryString.length;
 

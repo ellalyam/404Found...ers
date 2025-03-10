@@ -24,18 +24,27 @@ app.use(cors());
 app.use(express.json());
 
 
-app.get("/new-suggestion", async (req, res) => {
-  const spotifyToken = req.query.spotify_token;
-  const emotions =
-    req.query.source.results.predictions.file.models.face.grouped_predictions.id
-      .predictions.emotions;
+app.get("/:id/suggestions/new", async (req, res) => {
+  const id = req.params["id"];
+  const token = req.headers.token;
+  const idFromToken = await getUserId(token);
+
+  if (id != idFromToken) {
+    res.status(400).send({
+      error: "User ID does not match token",
+    });
+    return;
+  }
+
+  const emotions = req.query.source.results.predictions.file.models.face
+    .grouped_predictions.id.predictions.emotions;
   const seed = generateSeed(emotions);
-  const id = await getUserId(spotifyToken);
 
   // Send seed to spotify API
   getSuggestions(spotifyToken, seed)
     .then((suggestion) => {
-      return addSuggestion(suggestion, id).then(() => suggestion);
+      addSuggestion(suggestion, id);
+      return suggestion;
     })
     .then((suggestion) => res.send(suggestion));
 });
@@ -124,7 +133,7 @@ const fakePreviousSuggestions = {
 };
 
 // Get previous suggestions from DB
-app.get("/suggestions/:id", async (req, res) => {
+app.get("/:id/suggestions", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
   const idFromToken = await getUserId(token);
@@ -141,8 +150,18 @@ app.get("/suggestions/:id", async (req, res) => {
 });
 
 // Delete user from DB
-app.delete("/user/:token", (req, res) => {
-  const id = getUserId(req.params["token"]);
+app.delete("/:id", async (req, res) => {
+  const id = req.params["id"];
+  const token = req.headers.token;
+  const idFromToken = await getUserId(token);
+
+  if (id != idFromToken) {
+    res.status(400).send({
+      error: "User ID does not match token",
+    });
+    return;
+  }
+
   // removeUser calls removeSuggestions in mongoServices so shouldn't have to worry about deleting suggestions here
   removeUser(id)
     .then((_) => res.status(204).send(`Deleted user with id: ${id}`));

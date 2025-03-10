@@ -1,12 +1,22 @@
-import { SuggestionInterface } from "../components/suggestion";
+import { SuggestionInterface } from "../components/suggestion.tsx";
+import { backendUri } from "./uriService.ts";
 
 export class UserDataService {
   public static async fetchPreviousSuggestions()
                       : Promise<SuggestionInterface[] | undefined> {
-    const access_token = localStorage.getItem("spotify_access_token");
+    const spotifyToken = localStorage.getItem("spotify_access_token");
+    const spotifyId = localStorage.getItem("spotify_id");
 
     try {
-      const response = await fetch(`http://localhost:8000/suggestions/${access_token}`);
+      const headers = new Headers();
+      if (spotifyToken) {
+        headers.set("Token", spotifyToken);
+      }
+
+      const response = await fetch(backendUri + `/${spotifyId}/suggestions`, {
+        headers,
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
@@ -17,9 +27,20 @@ export class UserDataService {
   }
 
   public static async deleteUser(): Promise<JSON | undefined> {
-    const access_token = localStorage.getItem("spotify_access_token");
+    const spotifyToken = localStorage.getItem("spotify_access_token");
+    const spotifyId = localStorage.getItem("spotify_id");
+
     try {
-      const response = await fetch(`http://localhost:8000/user/${access_token}`, {method: 'DELETE'});
+      const headers = new Headers();
+      if (spotifyToken) {
+        headers.set("Token", spotifyToken);
+      }
+
+      const response = await fetch(backendUri + `${spotifyId}`, {
+        method: "DELETE",
+        headers,
+      });
+
       if (!response.ok) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }

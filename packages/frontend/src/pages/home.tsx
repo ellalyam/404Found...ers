@@ -116,7 +116,7 @@ export default function Home() {
     fetchPreviousSuggestions();
 
     //mapper functions
-  });
+  }, []);
 
   return (
     <div className="pageContainer">
