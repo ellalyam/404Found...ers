@@ -15,6 +15,7 @@ async function getUserId(accessToken) {
   const userData = await response.json();
 
   if (userData.error) {
+    console.log(userData.error);
     return -1;
   }
   return userData.id;
@@ -47,4 +48,6 @@ async function getUserTopTracks(accessToken, count) {
   return responseData.items.map((item) => item.id);
 }
 
-export { getUserId, getUserTopTracks };
+export {
+  getUserId, getUserTopTracks
+}

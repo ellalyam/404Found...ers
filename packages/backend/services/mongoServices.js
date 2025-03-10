@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User, Suggestion } from "../models/user.js";
 
+
 /**
  * Saves a new user to the DB
  * @param {JSON} user
@@ -16,14 +17,15 @@ function addUser(user) {
  * @param {number} spotifyId - Spotify ID associated with a user
  */
 async function findUser(spotifyId) {
-  let user = await User.findById(spotifyId);
-  if (!user) {
-    user = await addUser({
-      spotifyId: spotifyId,
-      suggestions: [],
-    });
-  }
-  return user;
+    let user = await User.findOne({ "spotifyId": await spotifyId },
+      "spotifyId suggestions");
+    if (!user) {
+        user = await addUser({
+            spotifyId: await spotifyId,
+            suggestions: []
+        });
+    }
+    return user
 }
 
 /**
@@ -31,9 +33,8 @@ async function findUser(spotifyId) {
  * @param {number} spotifyId - Spotify ID associated with a user
  */
 function findSuggestions(spotifyId) {
-  return User.findById(spotifyId)
-    .populate("suggestions")
-    .then((user) => user.suggestions);
+    return findUser(spotifyId)
+      .then((user) => user.suggestions); 
 }
 
 /**

@@ -27,7 +27,7 @@ export default function Login() {
           action={() => {
             SpotifyLoginService.logUserIn();
           }}
-          imagePath="/spotify_logo.png"
+          imagePath="/images/spotify_logo.png"
           text="Login With Spotify"
         />
       </div>
