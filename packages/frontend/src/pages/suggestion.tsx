@@ -24,8 +24,6 @@ export default function Suggestion() {
     // Captures screenshot
     const imageSrc = webcamRef.current?.getScreenshot();
     
-    // TO-DO:
-    // Convert image to public url
 
     if (imageSrc) {
       // setUrl(imageSrc);
