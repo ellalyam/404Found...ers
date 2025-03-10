@@ -39,6 +39,7 @@ app.get("/:id/suggestions/new", async (req, res) => {
   const emotions = req.query.source.results.predictions.file.models.face
     .grouped_predictions.id.predictions.emotions;
   const seed = generateSeed(emotions);
+  const id = await getUserId(spotifyToken);
 
   // Send seed to spotify API
   getSuggestions(spotifyToken, seed)
