@@ -1,7 +1,6 @@
 import { UserInterface } from "./userDataService.ts";
+import { frontendUri } from "./uriService.ts";
 const clientId: string = "08d7a2df00bd4b64b86be0839bcf858a";
-//const redirectUri: string = "http://localhost:5173";
-const redirectUri: string = "https://victorious-dune-0b89af71e.6.azurestaticapps.net";
 
 export class SpotifyLoginService {
   public static async logUserIn() {
@@ -25,7 +24,7 @@ export class SpotifyLoginService {
       scope,
       code_challenge_method: "S256",
       code_challenge: authChallenge,
-      redirect_uri: redirectUri,
+      redirect_uri: frontendUri,
     };
 
     // send authorization request
@@ -52,7 +51,7 @@ export class SpotifyLoginService {
         client_id: clientId,
         grant_type: "authorization_code",
         code,
-        redirect_uri: redirectUri,
+        redirect_uri: frontendUri,
         code_verifier: authVerifier,
       }),
     };
@@ -63,6 +62,11 @@ export class SpotifyLoginService {
 
     localStorage.setItem("spotify_access_token", response.access_token);
     localStorage.setItem("spotify_refresh_token", response.refresh_token);
+    
+    const userData = await SpotifyLoginService.getUserProfile();
+    localStorage.setItem("spotify_id", userData.spotifyUserId);
+
+    document.location = "home";
   }
 
   public static async refreshAccessToken() {
