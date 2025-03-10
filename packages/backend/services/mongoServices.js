@@ -7,13 +7,13 @@ import { User, Suggestion } from "../models/user.js";
  * @param {JSON} user
  */
 function addUser(user) {
-    const thisUser = new User(user);
-    const promise = thisUser.save();
-    return promise
+  const thisUser = new User(user);
+  const promise = thisUser.save();
+  return promise;
 }
 
 /**
- * Finds an existing user in the DB, if user w/ spotifyID DNE in Mongo, Add user instance and return 
+ * Finds an existing user in the DB, if user w/ spotifyID DNE in Mongo, Add user instance and return
  * @param {number} spotifyId - Spotify ID associated with a user
  */
 async function findUser(spotifyId) {
@@ -43,7 +43,7 @@ function findSuggestions(spotifyId) {
  * @param {number} spotifyId - User associated with suggestion(s)
  */
 function removeSuggestions(spotifyId) {
-    return Suggestion.deleteMany({ "user": spotifyId });
+  return Suggestion.deleteMany({ user: spotifyId });
 }
 
 /**
@@ -51,39 +51,35 @@ function removeSuggestions(spotifyId) {
  * @param {number} spotifyId - Spotify ID associated with a user
  */
 function removeUser(spotifyId) {
-    removeSuggestions(spotifyId);
-    return User.findByIdAndDelete(spotifyId);
+  removeSuggestions(spotifyId);
+  return User.findByIdAndDelete(spotifyId);
 }
 
 /**
  * Saves a new suggestions to the DB
  * @param {JSON} suggestion - Instance of a suggestion
  */
-function addSuggestion(suggestion, spotifyId) {
-    return findUser(spotifyId).then((user) => {
-      if (!user) {
-        throw new Error("User not found");
-      }
-  
-      const thisSuggestion = new Suggestion({
-        mood: suggestion.mood,
-        name: suggestion.name,
-        id: suggestion.id,
-        dateSuggested: new Date(suggestion.dateSuggested),
-        tracks: suggestion.tracks,
-      });
-  
-      return thisSuggestion.save().then((savedSuggestion) => {
-        user.suggestions.push(savedSuggestion._id);
-        return user.save().then(() => savedSuggestion);
-      });
-    });
+async function addSuggestion(suggestion, spotifyId) {
+  //  Refactored for clarity, are id and _id different? if so, is that necessary?
+  const user = await findUser(spotifyId);
+
+  const thisSuggestion = new Suggestion({
+    mood: suggestion.mood,
+    name: suggestion.name,
+    id: suggestion.id,
+    dateSuggested: new Date(suggestion.dateSuggested),
+    tracks: suggestion.tracks,
+  });
+
+  const savedSuggestion = await thisSuggestion.save();
+
+  if (!user.suggestions) {
+    user.suggestions = [];
+  }
+
+  user.suggestions.push(savedSuggestion._id);
+  await user.save();
+  return savedSuggestion;
 }
 
-export {
-    addUser,
-    findUser,
-    removeUser,
-    addSuggestion,
-    findSuggestions
-}
+export { addUser, findUser, removeUser, addSuggestion, findSuggestions };

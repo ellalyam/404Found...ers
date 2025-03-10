@@ -30,15 +30,19 @@ async function getUserId(accessToken) {
 async function getUserTopTracks(accessToken, count) {
   const url = "https://api.spotify.com/v1/me/top/tracks?";
 
-  const response = await fetch(url + new URLSearchParams({
-    type: "tracks",
-    time_range: "medium_term",
-    limit: count,
-  }), {
-    headers: {
-      Authorization: "Bearer " + accessToken,
+  const response = await fetch(
+    url +
+      new URLSearchParams({
+        type: "tracks",
+        time_range: "medium_term",
+        limit: count,
+      }),
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
     },
-  });
+  );
 
   const responseData = await response.json();
   return responseData.items.map((item) => item.id);
