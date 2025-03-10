@@ -56,6 +56,7 @@ app.delete("/user/:token", (req, res) => {
     .then((_) => res.status(204).send(`Deleted user with id: ${id}`));
 });
 
+
 app.listen(process.env.PORT || port, () => {
   console.log("REST API is listening.");
 });
