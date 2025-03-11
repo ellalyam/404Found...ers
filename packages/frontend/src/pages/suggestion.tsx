@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import emotionRecognitionService from "../services/emotionRecognitionService";
+import emotionRecognitionService from "../../../backend/services/emotionRecognitionService";
 import Webcam from "react-webcam";
 
 const videoConstraints = {

@@ -1,17 +1,16 @@
 //import dotenv from "dotenv";
 import { HumeClient } from "hume";
-import { Blob } from "buffer";
+import { Blob } from "node:buffer";
 // NOTE: the above import is necessary to pass the type checker, but the service
 // doesn't actually work unless you remove it. This will be a non-issue once
 // the API call is done from the backend.
-import { backendUri } from "./uriService.ts";
 
 //dotenv.config();
 //const { HUMEAI_API_KEY } = process.env;
 
 class EmotionRecognitionService {
   // Receives images and sends to Hume for analysis
-  public static async identifyEmotion(imageSrc: string): Promise<void> {
+  static async identifyEmotion(imageSrc) {
     try {
       // Connect to Hume.ai
       const client = new HumeClient({
@@ -20,7 +19,7 @@ class EmotionRecognitionService {
       console.log("Create client");
 
       // Used to poll job until complete
-      const checkJobStatus = async (jobId: string) => {
+      const checkJobStatus = async (jobId) => {
         while (true) {
           // Gets job details (including status)
           const waiting =
@@ -77,7 +76,7 @@ class EmotionRecognitionService {
                     console.log("Response: ", result);
 
                     const spotifyId = localStorage.getItem("spotify_id");
-                    const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
+                    /*const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -90,7 +89,7 @@ class EmotionRecognitionService {
                         } else {
                           throw new Error("Failed to send JSON.")
                         }
-                      });
+                    });*/
                 }
             } else {
                 console.log("not working");
@@ -107,7 +106,7 @@ class EmotionRecognitionService {
   }
 
   // convert a base64-encoded image to a blob
-  private static base64ImageToBlob(base64String: string): Blob {
+  static base64ImageToBlob(base64String) {
     // TODO move to frontend. The Blob type that Hume expects is not usable
     // in frontend code. When this gets moved to the backend, use
     //   import { Blob } from "node:buffer";
