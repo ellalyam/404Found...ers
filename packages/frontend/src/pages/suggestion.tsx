@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
-import emotionRecognitionService from "../../../backend/services/emotionRecognitionService";
+//import emotionRecognitionService from "../../../backend/services/emotionRecognitionService";
 import Webcam from "react-webcam";
+import { backendUri } from "../services/uriService";
 
 const videoConstraints = {
   width: 720,
@@ -26,13 +27,40 @@ export default function Suggestion() {
     
 
     if (imageSrc) {
-      // setUrl(imageSrc);
       console.log(imageSrc);
 
       //emotionRecognitionService.uploadBase64Image(imageSrc);
       setScreenshotCaptured(true);
-      // Using online image with public URL for now to test API
-      emotionRecognitionService.identifyEmotion(imageSrc)
+
+      // Send to backend
+      // emotionRecognitionService.identifyEmotion(imageSrc)
+      
+      //const spotifyId = localStorage.getItem("spotify_id");
+      //const token = localStorage.getItem("spotify_access_token") || "";
+      const spotifyId = "ella";
+      const token = "ellatoken";
+
+      //const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
+      const promise = fetch(backendUri + "/suggestions/new", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "token": token,
+        },
+        body: JSON.stringify({ imageUrl: imageSrc })
+      });
+
+      console.log("promise finished");
+
+      promise.then((res) => {
+        if (res.status === 201) {
+          return res.json();
+        } else {
+          throw new Error(`Failed to send image: ${res.statusText}`);
+        }
+      }).catch((error) => {
+        console.error("Error in request:", error);
+      });
     }
   }, [webcamRef, screenshotCaptured]);
 

@@ -8,50 +8,47 @@ import { Blob } from "node:buffer";
 //dotenv.config();
 //const { HUMEAI_API_KEY } = process.env;
 
-class EmotionRecognitionService {
+//class EmotionRecognitionService {
   // Receives images and sends to Hume for analysis
-  static async identifyEmotion(imageSrc) {
+  async function identifyEmotion(imageSrc) {
     try {
       // Connect to Hume.ai
       const client = new HumeClient({
         apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR",
       });
-      console.log("Create client");
 
-      // Used to poll job until complete
-      const checkJobStatus = async (jobId) => {
-        while (true) {
-          // Gets job details (including status)
-          const waiting =
-            await client.expressionMeasurement.batch.getJobDetails(
-              jobId,
-            );
-          console.log("Got job details");
+    // Used to poll job until complete
+    const checkJobStatus = async (jobId) => {
+      console.log("check job status");
+      while (true) {
+        // Gets job details (including status)
+        const waiting =
+          await client.expressionMeasurement.batch.getJobDetails(
+            jobId,
+          );
+        console.log("Got job details");
 
-          // Determines status
-          // Returns json if completed
-          // Returns nothing/raises error if failed
-          // Keeps looping if job is still in progress
-          if (waiting.state.status === "COMPLETED") {
-            console.log("Job complete", waiting);
-            return waiting;
-          } else if (waiting.state.status === "IN_PROGRESS") {
-            console.log("Job still working", waiting);
-          } else if (waiting.state.status === "FAILED") {
-            console.error("Job failed.");
-            return;
-          }
-
-          // Repolls every 3 seconds
-          await new Promise((resolve) => setTimeout(resolve, 3000));
+        // Determines status
+        // Returns json if completed
+        // Returns nothing/raises error if failed
+        // Keeps looping if job is still in progress
+        if (waiting.state.status === "COMPLETED") {
+          console.log("Job complete", waiting);
+          return waiting;
+        } else if (waiting.state.status === "IN_PROGRESS") {
+          console.log("Job still working", waiting);
+        } else if (waiting.state.status === "FAILED") {
+          console.error("Job failed.");
+          return;
         }
-      };
 
-      console.log("Processing image");
-      console.log(imageSrc);
+        // Repolls every 3 seconds
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    };
+      
       const base64String = imageSrc.replace(/^data:image\/\w+;base64,/, "");
-      const blobFile = EmotionRecognitionService.base64ImageToBlob(base64String);
-      console.log(blobFile);
+      const blobFile = base64ImageToBlob(base64String);
 
       // Send to Hume.ai
       const response =
@@ -59,7 +56,7 @@ class EmotionRecognitionService {
           [blobFile],
           {},
         );
-      console.log(response);
+      
       console.log(response.jobId);
 
       // Validates job
@@ -69,36 +66,16 @@ class EmotionRecognitionService {
         // Call to poll job status
         const checking = await checkJobStatus(response.jobId);
 
-                // Validates that job is complete
-                if(checking) {
-                    // Get job predictions (JSON)
-                    const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
-                    console.log("Response: ", result);
-
-                    const spotifyId = localStorage.getItem("spotify_id");
-                    /*const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body : JSON.stringify(result)
-                    });
-                    return promise.then((res) => {
-                        if (res.status === 201) {
-                          return res.json();
-                        } else {
-                          throw new Error("Failed to send JSON.")
-                        }
-                    });*/
-                }
-            } else {
-                console.log("not working");
-            }
-
-            // TODO:
-            // Send to backend
-            // Add comments & remove console.logs
-            // Hide API key
+        // Validates that job is complete
+        if(checking) {
+          // Get job predictions (JSON)
+          const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
+          console.log("got result");
+          console.log("Response: ", result);
+        } else {
+          console.log("not working");
+        }
+      }
 
     } catch (error) {
         console.error("Error processing image", error);
@@ -106,12 +83,8 @@ class EmotionRecognitionService {
   }
 
   // convert a base64-encoded image to a blob
-  static base64ImageToBlob(base64String) {
-    // TODO move to frontend. The Blob type that Hume expects is not usable
-    // in frontend code. When this gets moved to the backend, use
-    //   import { Blob } from "node:buffer";
-    // to get the Blob type we need.
-    const binaryString = window.atob(base64String);
+  function base64ImageToBlob(base64String) {
+    /*const binaryString = window.atob(base64String);
     const len = binaryString.length;
 
     const bytes = new Uint8Array(len);
@@ -120,8 +93,12 @@ class EmotionRecognitionService {
       bytes[i] = binaryString.charCodeAt(i);
     }
 
-    return new Blob([bytes], { type: "image/jpeg" });
-  }
-}
+    return new Blob([bytes], { type: "image/jpeg" });*/
 
-export default EmotionRecognitionService;
+    const binaryString = Buffer.from(base64String, 'base64');
+    const blob = new Blob([binaryString], { type: "image/jpeg" });
+    return blob;
+  }
+//}
+
+export {identifyEmotion};
