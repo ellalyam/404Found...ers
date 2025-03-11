@@ -72,7 +72,7 @@ export class SpotifyLoginService {
   public static async refreshAccessToken() {
     const refreshToken = localStorage.getItem("spotify_refresh_token");
     if (refreshToken === null) {
-      SpotifyLoginService.logUserIn();
+      await SpotifyLoginService.logUserIn();
       return;
     }
 
@@ -116,7 +116,7 @@ export class SpotifyLoginService {
     });
 
     if (response.status === 401) {
-      SpotifyLoginService.refreshAccessToken();
+      await SpotifyLoginService.refreshAccessToken();
       return await SpotifyLoginService.getUserProfile();
     } else if (response.status >= 400) {
       throw Error(`Failed to get user profile: ${response.body}`);
