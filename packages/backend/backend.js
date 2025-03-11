@@ -28,6 +28,10 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
+// Can also change to hash table if multiple instances are running at once?
+// Not sure if we need that yet tho?
+let userEmotions = null;
+
 app.get("/:id/suggestions/new", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
@@ -39,10 +43,15 @@ app.get("/:id/suggestions/new", async (req, res) => {
     });
     return;
   }
-
-  const emotions =
-    req.query.source.results.predictions.file.models.face.grouped_predictions.id
-      .predictions.emotions;
+  const emotions = userEmotions;
+  console.log("userEmotions in GET", userEmotions);
+  
+  if(!emotions) {
+    res.status(500).send({
+      error: "Error retrieving user's emotions",
+    });
+    return;
+  }
 
   const seed = generateSeed(emotions);
 
@@ -76,8 +85,10 @@ app.post("/:id/suggestions/new", async (req, res) => {
   }
 
   try {
-    const humeAnalysis = await identifyEmotion(imageUrl);
-    console.log("Response: ", humeAnalysis);
+    // humeEmotions holds ONLY the emotions part of the JSON
+    const humeEmotions = await identifyEmotion(imageUrl);
+    userEmotions = humeEmotions;
+    console.log("userEmotions in POST: ", userEmotions);
   } catch (error) {
     console.error("Error processing image:", error);
   }

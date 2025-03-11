@@ -69,8 +69,8 @@ async function identifyEmotion(imageSrc) {
         // Get job predictions (JSON)
         const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
         console.log("got result");
-        console.log("Response emotionRec: ", result);
-        return result;
+        // console.log("Response emotionRec: ", JSON.stringify(result[0].results.predictions[0].models.face.groupedPredictions[0].predictions[0].emotions));
+        return result[0].results.predictions[0].models.face.groupedPredictions[0].predictions[0].emotions;
       } else {
         console.log("not working");
       }

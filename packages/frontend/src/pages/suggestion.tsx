@@ -29,7 +29,6 @@ export default function Suggestion() {
     if (imageSrc) {
       console.log(imageSrc);
 
-      //emotionRecognitionService.uploadBase64Image(imageSrc);
       setScreenshotCaptured(true);
 
       const spotifyId = localStorage.getItem("spotify_id");
@@ -49,7 +48,7 @@ export default function Suggestion() {
 
       promise.then((res) => {
         if (res.status === 201) {
-          return res.json();
+          console.log( res.json());
         } else {
           throw new Error(`Failed to send image: ${res.statusText}`);
         }
