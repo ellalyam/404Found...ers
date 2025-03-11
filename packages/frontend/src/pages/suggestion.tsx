@@ -32,16 +32,11 @@ export default function Suggestion() {
       //emotionRecognitionService.uploadBase64Image(imageSrc);
       setScreenshotCaptured(true);
 
-      // Send to backend
-      // emotionRecognitionService.identifyEmotion(imageSrc)
-      
-      //const spotifyId = localStorage.getItem("spotify_id");
-      //const token = localStorage.getItem("spotify_access_token") || "";
-      const spotifyId = "ella";
-      const token = "ellatoken";
+      const spotifyId = localStorage.getItem("spotify_id");
+      const token = localStorage.getItem("spotify_access_token") || "";
 
-      //const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
-      const promise = fetch(backendUri + "/suggestions/new", {
+      const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
+      //const promise = fetch(backendUri + "/suggestions/new", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

@@ -56,19 +56,18 @@ app.get("/:id/suggestions/new", async (req, res) => {
 });
 
 // Send image to backend to get emotions JSON
-//app.post("/:id/suggestions/new", async (req, res) => {
-app.post("/suggestions/new", async (req, res) => {
+app.post("/:id/suggestions/new", async (req, res) => {
+//app.post("/suggestions/new", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
-  //const idFromToken = await getUserId(token);
-  const idFromToken = "ella";
+  const idFromToken = await getUserId(token);
 
-  /*if (id != idFromToken) {
+  if (id != idFromToken) {
     res.status(400).send({
       error: "User ID does not match token",
     });
     return;
-  }*/
+  }
 
   const imageUrl = req.body.imageUrl;
 
