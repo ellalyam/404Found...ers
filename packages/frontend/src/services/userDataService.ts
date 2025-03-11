@@ -1,5 +1,5 @@
 import { SuggestionInterface } from "../components/suggestion.tsx";
-import { SpotifyLoginService } from "spotifyLoginService.ts";
+import { SpotifyLoginService } from "./spotifyLoginService.ts";
 import { backendUri } from "./uriService.ts";
 
 export class UserDataService {
