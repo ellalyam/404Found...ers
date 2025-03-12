@@ -12,6 +12,7 @@ import {
 } from "./services/mongoServices.js";
 import { getUserId } from "./services/spotifyServices.js";
 import { getSuggestions } from "./services/suggestionService.js";
+import { getMainEmotion } from "./services/mainEmotion.js";
 import { identifyEmotion } from "./services/emotionRecognitionService.js";
 
 dotenv.config();
@@ -42,21 +43,19 @@ app.post("/:id/suggestions", async (req, res) => {
       }
     })
     .then((_) => {
-      console.log("Printing image");
       const image = req.body.image;
-      console.log(image);
       if (!image) {
         res.status(400).send({ error: "Missing encoded image" });
         throw Error("Handled");
       }
-      identifyEmotion(image);
+      return identifyEmotion(image);
     })
     .then((emotions) => {
       const seed = generateSeed(emotions);
-      getSuggestions(spotifyToken, seed);
+      return getSuggestions(spotifyToken, seed, getMainEmotion(emotions));
     })
     .then((suggestion) => addSuggestion(suggestion, id))
-    .then((result) => res.send(result))
+    .then((result) => res.status(201).send(result))
     .catch((error) => {
       if (error.message === "Handled") {
         return;
