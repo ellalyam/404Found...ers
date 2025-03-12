@@ -28,10 +28,6 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-// Can also change to hash table if multiple instances are running at once?
-// Not sure if we need that yet tho?
-let userEmotions = null;
-
 app.post("/:id/suggestions/new", async (req, res) => {
 //app.post("/suggestions/new", async (req, res) => {
   const id = req.params["id"];
