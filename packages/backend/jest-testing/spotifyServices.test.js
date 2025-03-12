@@ -18,7 +18,7 @@ test("Catches a fetch error", async () => {
   });
 
   const user = await getUserId("token");
-  expect(user).toBe(-1);
+  expect(user).toBe(undefined);
 });
 
 test("Returns array of top tracks", async () => {
