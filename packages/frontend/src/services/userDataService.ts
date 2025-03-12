@@ -1,4 +1,5 @@
 import { SuggestionInterface } from "../components/suggestion.tsx";
+import { SpotifyLoginService } from "./spotifyLoginService.ts";
 import { backendUri } from "./uriService.ts";
 
 export class UserDataService {
@@ -17,7 +18,10 @@ export class UserDataService {
         headers,
       });
 
-      if (!response.ok) {
+      if (response.status === 401) {
+        await SpotifyLoginService.refreshAccessToken();
+        return await UserDataService.fetchPreviousSuggestions();
+      } else if (!response.ok) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
       return await response.json();
@@ -41,7 +45,10 @@ export class UserDataService {
         headers,
       });
 
-      if (!response.ok) {
+      if (response.status === 401) {
+        await SpotifyLoginService.refreshAccessToken();
+        return await UserDataService.deleteUser();
+      } else if (!response.ok) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
       return await response.json();

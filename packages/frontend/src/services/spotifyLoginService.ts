@@ -72,7 +72,7 @@ export class SpotifyLoginService {
   public static async refreshAccessToken() {
     const refreshToken = localStorage.getItem("spotify_refresh_token");
     if (refreshToken === null) {
-      SpotifyLoginService.logUserIn();
+      await SpotifyLoginService.logUserIn();
       return;
     }
 
@@ -90,12 +90,18 @@ export class SpotifyLoginService {
       }),
     };
 
-    const body = await fetch(url, payload);
-    const response = await body.json();
+    const response = await fetch(url, payload);
 
-    localStorage.setItem("spotify_access_token", response.accessToken);
-    if (response.refreshToken) {
-      localStorage.setItem("spotify_refresh_token", response.refreshToken);
+    if (response.status >= 400) {
+      localStorage.setItem("isLoggedIn", "false");
+      document.location = "login";
+    }
+
+    const body = await response.json();
+
+    localStorage.setItem("spotify_access_token", body.accessToken);
+    if (body.refreshToken) {
+      localStorage.setItem("spotify_refresh_token", body.refreshToken);
     }
   }
 
@@ -109,11 +115,19 @@ export class SpotifyLoginService {
       },
     });
 
+    if (response.status === 401) {
+      await SpotifyLoginService.refreshAccessToken();
+      return await SpotifyLoginService.getUserProfile();
+    } else if (response.status >= 400) {
+      throw Error(`Failed to get user profile: ${response.body}`);
+    }
+
     const userData = await response.json();
 
     return {
       userProfileImage: (userData.images.length === 0)
-                          ? "/images/default_user.png" : userData.images[0].url,
+                        ? "/images/default_user.png"
+                        : userData.images[0].url,
       username: userData.display_name,
       spotifyUserId: userData.id,
     };

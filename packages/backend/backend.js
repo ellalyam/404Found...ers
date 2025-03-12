@@ -28,83 +28,99 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-app.post("/:id/suggestions/new", async (req, res) => {
-//app.post("/suggestions/new", async (req, res) => {
+app.post("/:id/suggestions", async (req, res) => {
+//app.post("/suggestions", async (req, res) => {
   const id = req.params["id"];
-  const token = req.headers.token;
-  const idFromToken = await getUserId(token);
-
-  if (id != idFromToken) {
-    res.status(400).send({
-      error: "User ID does not match token",
-    });
-    return;
-  }
-
-  const imageUrl = req.body.imageUrl;
-
-  if (!imageUrl) {
-    return res.status(400).send({ error: "Missing image URL" });
-  }
-  
-  // humeEmotions holds ONLY the emotions part of the JSON
-  const emotions = await identifyEmotion(imageUrl);
-  console.log("humeEmotions in POST: ", emotions);
-  console.log("done");
-
-  if(!emotions) {
-    return res.status(500).send({
-      error: "Error retrieving user's emotions",
-    });
-  }
-
-  console.log("Generating seed");
-  //return res.status(201).send(emotions);
-
-  const seed = generateSeed(emotions);
-
-  // Send seed to spotify API
-  getSuggestions(token, seed)
-    .then((suggestion) => {
-      addSuggestion(suggestion, id);
-      return suggestion;
+  const spotifyToken = req.headers.token;
+  await getUserId(spotifyToken)
+    .then((idFromToken) => {
+      if (id != idFromToken) {
+        res.status(400).send({ error: "User ID does not match token" });
+        throw Error("Handled");
+      } else {
+        return idFromToken;
+      }
     })
-    .then((suggestion) => res.send(suggestion));
+    .then((_) => {
+      console.log("Printing image");
+      const image = req.body.image;
+      console.log(image);
+      if (!image) {
+        res.status(400).send({ error: "Missing encoded image" });
+        throw Error("Handled");
+      }
+      identifyEmotion(image);
+    })
+    .then((emotions) => {
+      const seed = generateSeed(emotions);
+      getSuggestions(spotifyToken, seed);
+    })
+    .then((suggestion) => addSuggestion(suggestion, id))
+    .then((result) => res.send(result))
+    .catch((error) => {
+      if (error.message === "Handled") {
+        return;
+      } else if (error.message === "Token Expired") {
+        res.status(401).send({ error: "Token Expired" });
+      } else {
+        res.status(500).send();
+        console.log(error);
+      }
+    });
 });
 
 // Get previous suggestions from DB
 app.get("/:id/suggestions", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
-  const idFromToken = await getUserId(token);
-
-  if (id != idFromToken) {
-    res.status(400).send({
-      error: "User ID does not match token",
+  await getUserId(token)
+    .then((idFromToken) => {
+      if (id != idFromToken) {
+        res.status(400).send({ error: "User ID does not match token" });
+        throw Error("Handled");
+      } else {
+        return idFromToken;
+      }
+    })
+    .then((id) => findSuggestions(id))
+    .then((result) => res.send(result))
+    .catch((error) => {
+      if (error.message === "Handled") {
+        return;
+      } else if (error.message === "Token Expired") {
+        res.status(401).send({ error: "Token Expired" });
+      } else {
+        res.status(500).send();
+        console.log(error);
+      }
     });
-    return;
-  }
-
-  findSuggestions(idFromToken).then((result) => res.send(result));
 });
 
 // Delete user from DB
 app.delete("/:id", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
-  const idFromToken = await getUserId(token);
-
-  if (id != idFromToken) {
-    res.status(400).send({
-      error: "User ID does not match token",
+  await getUserId(token)
+    .then((idFromToken) => {
+      if (id != idFromToken) {
+        res.status(400).send({ error: "User ID does not match token" });
+        throw Error("Handled");
+      } else {
+        return idFromToken;
+      }
+    })
+    .then((_) => removeUser(id))
+    .then((_) => res.status(204).send(`Deleted user with id: ${id}`))
+    .catch((error) => {
+      if (error.message === "Handled") {
+        return;
+      } else if (error.message === "Token Expired") {
+        res.status(401).send({ error: "Token Expired" });
+      } else {
+        res.status(500).send();
+        console.log(error);
+      }
     });
-    return;
-  }
-
-  // removeUser calls removeSuggestions in mongoServices so shouldn't have to worry about deleting suggestions here
-  removeUser(id).then((_) =>
-    res.status(204).send(`Deleted user with id: ${id}`),
-  );
 });
 
 app.listen(process.env.PORT || port, () => {
