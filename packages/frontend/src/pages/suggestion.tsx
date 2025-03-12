@@ -3,10 +3,12 @@ import { useState, useRef, useCallback } from "react";
 import Webcam from "react-webcam";
 import { SpotifyLoginService } from "../services/spotifyLoginService.ts";
 import { backendUri } from "../services/uriService";
+import "../styling/suggestionPage.scss";
+import { useNavigate } from "react-router-dom";
 
 const videoConstraints = {
-  width: 720,
-  height: 360,
+  width: 840,
+  height: 420,
   facingMode: "user",
 };
 
@@ -15,6 +17,7 @@ export default function Suggestion() {
   // const [url, setUrl] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
   const [screenshotCaptured, setScreenshotCaptured] = useState(false);
+  const navigate = useNavigate();
 
   // Captures screenshots from webcam
   const capture = useCallback(async () => {
@@ -35,8 +38,8 @@ export default function Suggestion() {
       const spotifyId = localStorage.getItem("spotify_id");
       const token = localStorage.getItem("spotify_access_token") || "";
       
-      const promise = fetch(backendUri + `/${spotifyId}/suggestions`, {
-      //const promise = fetch(backendUri + "/suggestions", {
+      // const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
+      const promise = fetch(backendUri + "/suggestions/new", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -75,6 +78,7 @@ export default function Suggestion() {
     // Turns camera off after 3 seconds
     setTimeout(() => {
       setCaptureEnable(false);
+      navigate("/");
     }, 3000);
   };
 
@@ -84,19 +88,22 @@ export default function Suggestion() {
 
   return (
     <div className="webcam">
-      {isCaptureEnable && (
-        <div>
-          <Webcam
-            audio={false}
-            width={720}
-            height={360}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            style={{ transform: "scaleX(-1)" }}
-          />
-        </div>
-      )}
+      {
+        isCaptureEnable && (
+          <div>
+            <h3 className="title">Reading Emotion...</h3>
+            <Webcam
+              audio={false}
+              width={840}
+              height={420}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+              style={{ transform: "scaleX(-1)" }}
+            />
+          </div>
+        )
+      }
     </div>
   );
 }
