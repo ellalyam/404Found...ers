@@ -22,15 +22,15 @@ async function getRecommendedTracks(seed, mainEmotion) {
 
   const responseData = await response.json();
   const outputData = {
-    name: "TEMP", //TODO remove placeholder
-    id: "TEMP2",
+    name: "TEMP", //TODO remove
+    id: "TEMP0", //TODO remove
     mood: mainEmotion,
     dateSuggested: new Date(),
     tracks: responseData.content.map((track) => {
       return {
         title: track.trackTitle,
         id: track.href.substring(31),
-        album: "TEMP", //TODO remove placeholder
+        album: "TEMP", //TODO remove
         artist: track.artists[0].name,
       };
     }),
