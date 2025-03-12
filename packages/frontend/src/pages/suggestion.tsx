@@ -1,6 +1,8 @@
 import { useState, useRef, useCallback } from "react";
-import emotionRecognitionService from "../services/emotionRecognitionService";
+//import emotionRecognitionService from "../../../backend/services/emotionRecognitionService";
 import Webcam from "react-webcam";
+import { SpotifyLoginService } from "../services/spotifyLoginService.ts";
+import { backendUri } from "../services/uriService";
 
 const videoConstraints = {
   width: 720,
@@ -24,17 +26,39 @@ export default function Suggestion() {
     // Captures screenshot
     const imageSrc = webcamRef.current?.getScreenshot();
     
-    // TO-DO:
-    // Convert image to public url
 
     if (imageSrc) {
-      // setUrl(imageSrc);
       console.log(imageSrc);
 
-      //emotionRecognitionService.uploadBase64Image(imageSrc);
       setScreenshotCaptured(true);
-      // Using online image with public URL for now to test API
-      emotionRecognitionService.identifyEmotion(imageSrc)
+
+      const spotifyId = localStorage.getItem("spotify_id");
+      const token = localStorage.getItem("spotify_access_token") || "";
+      
+      const promise = fetch(backendUri + `/${spotifyId}/suggestions`, {
+      //const promise = fetch(backendUri + "/suggestions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "token": token,
+        },
+        body: JSON.stringify({ image: imageSrc })
+      });
+
+      promise.then((res) => {
+        if (res.status === 201) {
+          return res.json();
+        } else if (res.status === 401) {
+          SpotifyLoginService.refreshAccessToken();
+          //location.reload(); // TODO maybe make this reuse the existing image?
+        } else {
+          throw new Error(`Failed to send image: ${res.statusText}`);
+        }
+      }).then((data) => {
+        console.log("Successful: ", data);
+      }).catch((error) => {
+        console.error("Error in request:", error);
+      });
     }
   }, [webcamRef, screenshotCaptured]);
 

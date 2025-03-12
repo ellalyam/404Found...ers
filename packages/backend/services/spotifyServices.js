@@ -12,11 +12,14 @@ async function getUserId(accessToken) {
     },
   });
 
+  if (response.status === 401) {
+    throw Error("Token Expired");
+  }
+
   const userData = await response.json();
 
   if (userData.error) {
     console.log(userData.error);
-    return -1;
   }
   return userData.id;
 }
@@ -44,10 +47,14 @@ async function getUserTopTracks(accessToken, count) {
     },
   );
 
+  if (response.status === 401) {
+    throw Error("Token Expired");
+  } else if (response.status >= 400) {
+    throw Error(`Request failed: ${response.body}`)
+  }
+
   const responseData = await response.json();
   return responseData.items.map((item) => item.id);
 }
 
-export {
-  getUserId, getUserTopTracks
-}
+export { getUserId, getUserTopTracks };
