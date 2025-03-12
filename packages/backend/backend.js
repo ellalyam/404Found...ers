@@ -28,11 +28,11 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-app.post("/:id/suggestions/new", async (req, res) => {
-//app.post("/suggestions/new", async (req, res) => {
+app.post("/:id/suggestions", async (req, res) => {
+//app.post("/suggestions", async (req, res) => {
   const id = req.params["id"];
   const spotifyToken = req.headers.token;
-  await getUserId(token)
+  await getUserId(spotifyToken)
     .then((idFromToken) => {
       if (id != idFromToken) {
         res.status(400).send({ error: "User ID does not match token" });
@@ -42,11 +42,14 @@ app.post("/:id/suggestions/new", async (req, res) => {
       }
     })
     .then((_) => {
-      const imageUrl = req.body.imageUrl;
-      if (!imageUrl) {
-        throw Error("Missing encoded image");
+      console.log("Printing image");
+      const image = req.body.image;
+      console.log(image);
+      if (!image) {
+        res.status(400).send({ error: "Missing encoded image" });
+        throw Error("Handled");
       }
-      identifyEmotion(imageUrl);
+      identifyEmotion(image);
     })
     .then((emotions) => {
       const seed = generateSeed(emotions);
@@ -59,8 +62,6 @@ app.post("/:id/suggestions/new", async (req, res) => {
         return;
       } else if (error.message === "Token Expired") {
         res.status(401).send({ error: "Token Expired" });
-      } else if (error.message === "Missing encoded image") {
-        res.status(400).send({ error: "Missing encoded image" });
       } else {
         res.status(500).send();
         console.log(error);

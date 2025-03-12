@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 //import emotionRecognitionService from "../../../backend/services/emotionRecognitionService";
 import Webcam from "react-webcam";
+import { SpotifyLoginService } from "../services/spotifyLoginService.ts";
 import { backendUri } from "../services/uriService";
 
 const videoConstraints = {
@@ -34,19 +35,22 @@ export default function Suggestion() {
       const spotifyId = localStorage.getItem("spotify_id");
       const token = localStorage.getItem("spotify_access_token") || "";
       
-      const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
-      //const promise = fetch(backendUri + "/suggestions/new", {
+      const promise = fetch(backendUri + `/${spotifyId}/suggestions`, {
+      //const promise = fetch(backendUri + "/suggestions", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             "token": token,
         },
-        body: JSON.stringify({ imageUrl: imageSrc })
+        body: JSON.stringify({ image: imageSrc })
       });
 
       promise.then((res) => {
         if (res.status === 201) {
           return res.json();
+        } else if (res.status === 401) {
+          SpotifyLoginService.refreshAccessToken();
+          //location.reload(); // TODO maybe make this reuse the existing image?
         } else {
           throw new Error(`Failed to send image: ${res.statusText}`);
         }
