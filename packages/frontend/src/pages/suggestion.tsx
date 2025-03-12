@@ -7,8 +7,8 @@ import "../styling/suggestionPage.scss";
 import { useNavigate } from "react-router-dom";
 
 const videoConstraints = {
-  width: 840,
-  height: 420,
+  width: 320,
+  height: 240,
   facingMode: "user",
 };
 
@@ -20,14 +20,14 @@ export default function Suggestion() {
   const navigate = useNavigate();
 
   // Captures screenshots from webcam
-  const capture = useCallback(async () => {
+  const capture = useCallback(() => {
     console.log("start capture");
 
     if (screenshotCaptured)
       return;
 
     // Captures screenshot
-    const imageSrc = webcamRef.current?.getScreenshot();
+    const imageSrc = webcamRef.current?.getScreenshot(videoConstraints);
     
 
     if (imageSrc) {
@@ -48,12 +48,12 @@ export default function Suggestion() {
         body: JSON.stringify({ image: imageSrc })
       });
 
-      promise.then((res) => {
+      promise.then(async (res) => {
         if (res.status === 201) {
           return res.json();
         } else if (res.status === 401) {
-          SpotifyLoginService.refreshAccessToken();
-          //location.reload(); // TODO maybe make this reuse the existing image?
+          await SpotifyLoginService.refreshAccessToken();
+          location.reload();
         } else {
           throw new Error(`Failed to send image: ${res.statusText}`);
         }
@@ -73,12 +73,12 @@ export default function Suggestion() {
     setTimeout(() => {
       console.log("create capture");
       capture();
-    }, 1500);
+      navigate("/home");
+    }, 1499);
 
     // Turns camera off after 3 seconds
     setTimeout(() => {
       setCaptureEnable(false);
-      navigate("/");
     }, 3000);
   };
 
