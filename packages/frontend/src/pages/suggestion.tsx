@@ -38,8 +38,8 @@ export default function Suggestion() {
       const spotifyId = localStorage.getItem("spotify_id");
       const token = localStorage.getItem("spotify_access_token") || "";
       
-      // const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
-      const promise = fetch(backendUri + "/suggestions/new", {
+      const promise = fetch(backendUri + `/${spotifyId}/suggestions`, {
+      // const promise = fetch(backendUri + "/suggestions", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
