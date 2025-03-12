@@ -12,6 +12,7 @@ import {
 } from "./services/mongoServices.js";
 import { getUserId } from "./services/spotifyServices.js";
 import { getSuggestions } from "./services/suggestionService.js";
+import { identifyEmotion } from "./services/emotionRecognitionService.js";
 
 dotenv.config();
 
@@ -27,7 +28,8 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-app.get("/:id/suggestions/new", async (req, res) => {
+app.post("/:id/suggestions/new", async (req, res) => {
+//app.post("/suggestions/new", async (req, res) => {
   const id = req.params["id"];
   const token = req.headers.token;
   const idFromToken = await getUserId(token);
@@ -39,13 +41,30 @@ app.get("/:id/suggestions/new", async (req, res) => {
     return;
   }
 
-  const emotions =
-    req.query.source.results.predictions.file.models.face.grouped_predictions.id
-      .predictions.emotions;
+  const imageUrl = req.body.imageUrl;
+
+  if (!imageUrl) {
+    return res.status(400).send({ error: "Missing image URL" });
+  }
+  
+  // humeEmotions holds ONLY the emotions part of the JSON
+  const emotions = await identifyEmotion(imageUrl);
+  console.log("humeEmotions in POST: ", emotions);
+  console.log("done");
+
+  if(!emotions) {
+    return res.status(500).send({
+      error: "Error retrieving user's emotions",
+    });
+  }
+
+  console.log("Generating seed");
+  //return res.status(201).send(emotions);
+
   const seed = generateSeed(emotions);
 
   // Send seed to spotify API
-  getSuggestions(spotifyToken, seed)
+  getSuggestions(token, seed)
     .then((suggestion) => {
       addSuggestion(suggestion, id);
       return suggestion;
