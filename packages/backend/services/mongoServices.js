@@ -33,8 +33,10 @@ async function findUser(spotifyId) {
  * Finds suggestions corresponding with a user
  * @param {number} spotifyId - Spotify ID associated with a user
  */
-function findSuggestions(spotifyId) {
-  return findUser(spotifyId).then((user) => user.suggestions);
+async function findSuggestions(spotifyId) {
+  const sIds = await findUser(spotifyId).then((user) => user.suggestions);
+  return await Promise.all(sIds.map(async (id) => 
+    Suggestion.findById(id).lean().exec()));
 }
 
 /**
