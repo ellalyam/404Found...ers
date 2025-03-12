@@ -32,39 +32,6 @@ app.use(express.json());
 // Not sure if we need that yet tho?
 let userEmotions = null;
 
-app.get("/:id/suggestions/new", async (req, res) => {
-  const id = req.params["id"];
-  const token = req.headers.token;
-  const idFromToken = await getUserId(token);
-
-  if (id != idFromToken) {
-    res.status(400).send({
-      error: "User ID does not match token",
-    });
-    return;
-  }
-  const emotions = userEmotions;
-  console.log("userEmotions in GET", userEmotions);
-  
-  if(!emotions) {
-    res.status(500).send({
-      error: "Error retrieving user's emotions",
-    });
-    return;
-  }
-
-  const seed = generateSeed(emotions);
-
-  // Send seed to spotify API
-  getSuggestions(spotifyToken, seed)
-    .then((suggestion) => {
-      addSuggestion(suggestion, id);
-      return suggestion;
-    })
-    .then((suggestion) => res.send(suggestion));
-});
-
-// Send image to backend to get emotions JSON
 app.post("/:id/suggestions/new", async (req, res) => {
 //app.post("/suggestions/new", async (req, res) => {
   const id = req.params["id"];
@@ -83,15 +50,30 @@ app.post("/:id/suggestions/new", async (req, res) => {
   if (!imageUrl) {
     return res.status(400).send({ error: "Missing image URL" });
   }
+  
+  // humeEmotions holds ONLY the emotions part of the JSON
+  const emotions = await identifyEmotion(imageUrl);
+  console.log("humeEmotions in POST: ", emotions);
+  console.log("done");
 
-  try {
-    // humeEmotions holds ONLY the emotions part of the JSON
-    const humeEmotions = await identifyEmotion(imageUrl);
-    userEmotions = humeEmotions;
-    console.log("userEmotions in POST: ", userEmotions);
-  } catch (error) {
-    console.error("Error processing image:", error);
+  if(!emotions) {
+    return res.status(500).send({
+      error: "Error retrieving user's emotions",
+    });
   }
+
+  console.log("Generating seed");
+  //return res.status(201).send(emotions);
+
+  const seed = generateSeed(emotions);
+
+  // Send seed to spotify API
+  getSuggestions(token, seed)
+    .then((suggestion) => {
+      addSuggestion(suggestion, id);
+      return suggestion;
+    })
+    .then((suggestion) => res.send(suggestion));
 });
 
 // Get previous suggestions from DB

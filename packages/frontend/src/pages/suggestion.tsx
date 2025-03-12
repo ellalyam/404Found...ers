@@ -33,7 +33,7 @@ export default function Suggestion() {
 
       const spotifyId = localStorage.getItem("spotify_id");
       const token = localStorage.getItem("spotify_access_token") || "";
-
+      
       const promise = fetch(backendUri + `/${spotifyId}/suggestions/new`, {
       //const promise = fetch(backendUri + "/suggestions/new", {
         method: "POST",
@@ -44,14 +44,14 @@ export default function Suggestion() {
         body: JSON.stringify({ imageUrl: imageSrc })
       });
 
-      console.log("promise finished");
-
       promise.then((res) => {
         if (res.status === 201) {
-          console.log( res.json());
+          return res.json();
         } else {
           throw new Error(`Failed to send image: ${res.statusText}`);
         }
+      }).then((data) => {
+        console.log("Successful: ", data);
       }).catch((error) => {
         console.error("Error in request:", error);
       });

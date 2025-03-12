@@ -69,7 +69,6 @@ async function identifyEmotion(imageSrc) {
         // Get job predictions (JSON)
         const result = await client.expressionMeasurement.batch.getJobPredictions(response.jobId);
         console.log("got result");
-        // console.log("Response emotionRec: ", JSON.stringify(result[0].results.predictions[0].models.face.groupedPredictions[0].predictions[0].emotions));
         return result[0].results.predictions[0].models.face.groupedPredictions[0].predictions[0].emotions;
       } else {
         console.log("not working");
@@ -83,20 +82,9 @@ async function identifyEmotion(imageSrc) {
 
 // convert a base64-encoded image to a blob
 function base64ImageToBlob(base64String) {
-  /*const binaryString = window.atob(base64String);
-  const len = binaryString.length;
-
-  const bytes = new Uint8Array(len);
-
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-
-  return new Blob([bytes], { type: "image/jpeg" });*/
-
   const binaryString = Buffer.from(base64String, 'base64');
   const blob = new Blob([binaryString], { type: "image/jpeg" });
   return blob;
-}
+} 
 
 export {identifyEmotion};
