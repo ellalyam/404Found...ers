@@ -57,6 +57,4 @@ async function getUserTopTracks(accessToken, count) {
   return responseData.items.map((item) => item.id);
 }
 
-export {
-  getUserId, getUserTopTracks
-}
+export { getUserId, getUserTopTracks };

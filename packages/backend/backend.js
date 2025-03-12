@@ -3,11 +3,16 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { findScore, generateSeed } from "./services/generateSeed.js";
-import { addUser, findUser, removeUser,
-         addSuggestion, findSuggestions } from "./services/mongoServices.js";
+import {
+  addUser,
+  findUser,
+  removeUser,
+  addSuggestion,
+  findSuggestions,
+} from "./services/mongoServices.js";
 import { getUserId } from "./services/spotifyServices.js";
 import { getSuggestions } from "./services/suggestionService.js";
-
+import { identifyEmotion } from "./services/emotionRecognitionService.js";
 
 dotenv.config();
 
@@ -23,8 +28,8 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
-
-app.get("/:id/suggestions/new", async (req, res) => {
+app.post("/:id/suggestions/new", async (req, res) => {
+//app.post("/suggestions/new", async (req, res) => {
   const id = req.params["id"];
   const spotifyToken = req.headers.token;
   await getUserId(token)
@@ -37,8 +42,13 @@ app.get("/:id/suggestions/new", async (req, res) => {
       }
     })
     .then((_) => {
-      const emotions = req.query.source.results.predictions.file.models.face
-        .grouped_predictions.id.predictions.emotions;
+      const imageUrl = req.body.imageUrl;
+      if (!imageUrl) {
+        throw Error("Missing encoded image");
+      }
+      identifyEmotion(imageUrl);
+    })
+    .then((emotions) => {
       const seed = generateSeed(emotions);
       getSuggestions(spotifyToken, seed);
     })
@@ -49,6 +59,8 @@ app.get("/:id/suggestions/new", async (req, res) => {
         return;
       } else if (error.message === "Token Expired") {
         res.status(401).send({ error: "Token Expired" });
+      } else if (error.message === "Missing encoded image") {
+        res.status(400).send({ error: "Missing encoded image" });
       } else {
         res.status(500).send();
         console.log(error);
@@ -96,7 +108,7 @@ app.delete("/:id", async (req, res) => {
         return idFromToken;
       }
     })
-    .then((id) => removeUser(id))
+    .then((_) => removeUser(id))
     .then((_) => res.status(204).send(`Deleted user with id: ${id}`))
     .catch((error) => {
       if (error.message === "Handled") {
