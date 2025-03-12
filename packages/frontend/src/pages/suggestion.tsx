@@ -73,12 +73,12 @@ export default function Suggestion() {
     setTimeout(() => {
       console.log("create capture");
       capture();
-      navigate("/home");
     }, 1499);
 
     // Turns camera off after 3 seconds
     setTimeout(() => {
       setCaptureEnable(false);
+      navigate("/home");
     }, 3000);
   };
 
