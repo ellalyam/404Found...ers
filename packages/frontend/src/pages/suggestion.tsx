@@ -52,8 +52,11 @@ export default function Suggestion() {
         if (res.status === 201) {
           return res.json();
         } else if (res.status === 401) {
-          await SpotifyLoginService.refreshAccessToken();
-          location.reload();
+          if (await SpotifyLoginService.refreshAccessToken()) {
+            location.reload();
+          } else {
+            document.location = "/";
+          }
         } else {
           throw new Error(`Failed to send image: ${res.statusText}`);
         }

@@ -19,9 +19,12 @@ export class UserDataService {
       });
 
       if (response.status === 401) {
-        await SpotifyLoginService.refreshAccessToken();
-        return await UserDataService.fetchPreviousSuggestions();
-      } else if (!response.ok) {
+        if (await SpotifyLoginService.refreshAccessToken()) {
+          return await UserDataService.fetchPreviousSuggestions();
+        } else {
+          document.location = "/";
+        }
+      } else if (response.status >= 400) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
       return await response.json();
@@ -46,9 +49,12 @@ export class UserDataService {
       });
 
       if (response.status === 401) {
-        await SpotifyLoginService.refreshAccessToken();
-        return await UserDataService.deleteUser();
-      } else if (!response.ok) {
+        if (await SpotifyLoginService.refreshAccessToken()) {
+          return await UserDataService.deleteUser();
+        } else {
+          document.location = "/";
+        }
+      } else if (response.status >= 400) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
       return await response.json();
