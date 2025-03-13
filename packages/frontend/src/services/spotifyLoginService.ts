@@ -83,7 +83,7 @@ export class SpotifyLoginService {
     const refreshToken = localStorage.getItem("spotify_refresh_token");
     if (refreshToken === null) {
       await SpotifyLoginService.logUserIn();
-      return;
+      return false;
     }
 
     const url = "https://accounts.spotify.com/api/token";
