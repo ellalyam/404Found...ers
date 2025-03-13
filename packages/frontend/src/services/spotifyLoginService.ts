@@ -69,11 +69,21 @@ export class SpotifyLoginService {
     document.location = "home";
   }
 
-  public static async refreshAccessToken() {
+
+  private static semaphore = false;
+
+  public static async refreshAccessToken(): Promise<boolean> {
+    if (SpotifyLoginService.semaphore) {
+      await new Promise((r) => setTimeout(r, 1000));
+      return true;
+    } else {
+      SpotifyLoginService.semaphore = true;
+    }
+
     const refreshToken = localStorage.getItem("spotify_refresh_token");
     if (refreshToken === null) {
       await SpotifyLoginService.logUserIn();
-      return;
+      return false;
     }
 
     const url = "https://accounts.spotify.com/api/token";
@@ -94,15 +104,17 @@ export class SpotifyLoginService {
 
     if (response.status >= 400) {
       localStorage.setItem("isLoggedIn", "false");
-      document.location = "login";
+      return false;
     }
 
     const body = await response.json();
 
-    localStorage.setItem("spotify_access_token", body.accessToken);
-    if (body.refreshToken) {
-      localStorage.setItem("spotify_refresh_token", body.refreshToken);
+    localStorage.setItem("spotify_access_token", body.access_token);
+    if (body.refresh_token) {
+      localStorage.setItem("spotify_refresh_token", body.refresh_token);
     }
+    SpotifyLoginService.semaphore = false;
+    return true;
   }
 
   public static async getUserProfile(): Promise<UserInterface> {
@@ -116,13 +128,22 @@ export class SpotifyLoginService {
     });
 
     if (response.status === 401) {
-      await SpotifyLoginService.refreshAccessToken();
-      return await SpotifyLoginService.getUserProfile();
+      if (await SpotifyLoginService.refreshAccessToken()) {
+        return await SpotifyLoginService.getUserProfile();
+      } else {
+        localStorage.setItem("isLoggedIn", "false");
+        document.location = "/";
+      }
     } else if (response.status >= 400) {
       throw Error(`Failed to get user profile: ${response.body}`);
     }
 
     const userData = await response.json();
+
+    if (userData.error) {
+      console.log(userData.error);
+      throw Error("something happened");
+    }
 
     return {
       userProfileImage: (userData.images.length === 0)
