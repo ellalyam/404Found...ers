@@ -10,8 +10,7 @@ const TrackSchema = new mongoose.Schema(
       type: String,
       required: true,
     }
-  },
-  { _id: false }  // prevents automatic _id generation for TrackSchema
+  }
 );
 
 
