@@ -11,6 +11,7 @@ test("Gets emotion with highest score", async () => {
     { name: "Joy", score: 0.3 },
     { name: "Romance", score: 0.1 },
     { name: "Excitement", score: 0.2 },
+    { name: "Surprise", score: 0.9 },
   ];
 
   expect(getMainEmotion(emotions)).toEqual("Boredom");
