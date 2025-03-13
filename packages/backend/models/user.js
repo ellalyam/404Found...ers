@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
 
-const TrackSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+const TrackSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    artist: {
+      type: String,
+      required: true,
+    }
   },
-  artist: {
-    type: String,
-    required: true,
-  }
-});
+  { _id: false }  // prevents automatic _id generation for TrackSchema
+);
+
 
 const SuggestionSchema = new mongoose.Schema({
   mood: {
