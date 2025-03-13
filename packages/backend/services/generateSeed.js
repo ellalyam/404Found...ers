@@ -15,7 +15,10 @@ function findScore(emotions, emotion) {
  * @returns {number} - Normalized weighted sum based on userScores
  */
 function getMeasure(weights, userScores) {
-  const weightedEmotions = weights.map((emotion, i) => emotion * userScores[i]).sort().slice(-3);
+  const weightedEmotions = weights
+    .map((emotion, i) => emotion * userScores[i])
+    .sort()
+    .slice(-3);
   return weightedEmotions.reduce((a, v) => a + v, 0) / weightedEmotions.length;
 }
 
@@ -50,9 +53,8 @@ function generateSeed(emotions) {
     danceability: getMeasure(weights["danceability"], scoreArr),
     energy: getMeasure(weights["energy"], scoreArr),
     speechiness: getMeasure(weights["speechiness"], scoreArr),
-    valence: getMeasure(weights["valence"], scoreArr)
+    valence: getMeasure(weights["valence"], scoreArr),
   };
-
 }
 
 export { findScore, generateSeed };
