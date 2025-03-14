@@ -18,11 +18,12 @@ function getMeasure(weights, userScores) {
   const weightedEmotions = weights
     .map((emotion, i) => emotion * userScores[i])
     .sort()
-    .slice(-3);
+    .slice(-1);
+  console.log(`WEIGHTED EMOTIONS ${weightedEmotions}`);
   const normWeighted = weightedEmotions.map(
     (n) =>
-      (n - Math.min(...weightedEmotions)) /
-      (Math.max(...weightedEmotions) - Math.min(...weightedEmotions)),
+      ((n - Math.min(...weightedEmotions)) /
+      ((Math.max(...weightedEmotions) - Math.min(...weightedEmotions)))),
   );
   return normWeighted.reduce((a, v) => a + v, 0) / 3;
 }
@@ -52,14 +53,25 @@ function generateSeed(emotions) {
     energy: [1.0, 0.15, 0.8, 0.1, 0.35, 0.4, 0.4, 0.4],
     speechiness: [0.5, 0.15, 0.4, 0.35, 0.05, 0.35, 0.4, 0.45],
     valence: [0.15, 0.85, 0.7, 0.65, 0.4, 0.95, 0.9, 0.95],
+    acousticness: [0.1, 0.3, 0.7, 0.9, 0.8, 0.5, 0.8, 0.2],
+    instrumentalness: [0.1, 0.3, 0.8, 0.7, 0.9, 0.3, 0.6, 0.2],
+    liveness: [0.3, 0.5, 0.2, 0.2, 0.1, 0.7, 0.4, 0.9],
+    loudness: [0.9, 0.7, 0.3, 0.2, 0.3, 0.8, 0.5, 0.9]
   };
 
-  return {
+  
+  const res = {
     danceability: getMeasure(weights["danceability"], scoreArr),
     energy: getMeasure(weights["energy"], scoreArr),
     speechiness: getMeasure(weights["speechiness"], scoreArr),
     valence: getMeasure(weights["valence"], scoreArr),
+    acousticness: getMeasure(weights["acousticness"], scoreArr),
+    instrumentalness: getMeasure(weights["instrumentalness"], scoreArr),
+    liveness: getMeasure(weights["liveness"], scoreArr),
+    loudness: getMeasure(weights["loudness"], scoreArr),
   };
+  console.log(res);
+  return res;
 }
 
 export { findScore, generateSeed };
