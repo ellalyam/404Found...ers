@@ -1,18 +1,15 @@
-//import dotenv from "dotenv";
+import dotenv from "dotenv";
 import { HumeClient } from "hume";
 import { Blob } from "node:buffer";
-// NOTE: the above import is necessary to pass the type checker, but the service
-// doesn't actually work unless you remove it. This will be a non-issue once
-// the API call is done from the backend.
 
-//dotenv.config();
-//const { HUMEAI_API_KEY } = process.env;
+dotenv.config();
+const { HUMEAI_API_KEY } = process.env;
 
 // Receives images and sends to Hume for analysis
 async function identifyEmotion(imageSrc) {
   // Connect to Hume.ai
   const client = new HumeClient({
-    apiKey: "NyEnSqsDCJWluAYaBquATgHslcPB8Y0HC5T7mkfN0JiUp0SR",
+    apiKey: HUMEAI_API_KEY,
   });
 
   // Used to poll job until complete
