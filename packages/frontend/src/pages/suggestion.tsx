@@ -28,7 +28,7 @@ export default function Suggestion() {
 
     // Captures screenshot
     const imageSrc = webcamRef.current?.getScreenshot(videoConstraints);
-    
+
     if (imageSrc) {
       console.log(imageSrc);
 
@@ -36,13 +36,13 @@ export default function Suggestion() {
 
       const spotifyId = localStorage.getItem("spotify_id");
       const token = localStorage.getItem("spotify_access_token") || "";
-      
+
       const promise = fetch(backendUri + `/${spotifyId}/suggestions`, {
-      // const promise = fetch(backendUri + "/suggestions", {
+        // const promise = fetch(backendUri + "/suggestions", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "token": token,
+          "Content-Type": "application/json",
+          "token": token,
         },
         body: JSON.stringify({ image: imageSrc })
       });
@@ -86,7 +86,7 @@ export default function Suggestion() {
   return (
     <div className="webcam">
       {
-        isCaptureEnable && (
+        isCaptureEnable ? (
           <div>
             <h3 className="title">Reading Emotion...</h3>
             <Webcam
@@ -98,6 +98,10 @@ export default function Suggestion() {
               videoConstraints={videoConstraints}
               style={{ transform: "scaleX(-1)" }}
             />
+          </div>
+        ) : (
+          <div className="loadingSpinner">
+            <img width={400} height={400} src="/images/loading-spinner.gif" alt="Loading Spinner" />
           </div>
         )
       }
