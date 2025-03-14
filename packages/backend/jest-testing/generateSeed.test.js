@@ -4,7 +4,7 @@ import { findScore, generateSeed } from "../services/generateSeed.js";
 const emotions = [
   { name: "Anger", score: 0.1 },
   { name: "Anxiety", score: 0.2 },
-  { name: "Boredom", score: 0.6 },
+  { name: "Boredom", score: 1 },
   { name: "Calmness", score: 0.4 },
   { name: "Concentration", score: 0.1 },
   { name: "Joy", score: 0.3 },

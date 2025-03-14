@@ -29,6 +29,18 @@ test("Returns a user from the DB", async () => {
   expect(result).toEqual(user);
 });
 
+test("If a user doesn't exist in the DB, create user and return the new user", async () => {
+  const user = { spotifyId: "abc123", suggestions: [] };
+  jest.spyOn(User, "findOne").mockResolvedValue(undefined);
+  const result = await findUser("abc123");
+
+  expect(User.findOne).toHaveBeenCalledWith(
+    { spotifyId: "abc123" },
+    "spotifyId suggestions",
+  );
+  expect(result).toEqual(user);
+});
+
 test("Deletes users suggestions and then deletes user", async () => {
   const deleteRes = { spotifyId: "abc123" };
   jest.spyOn(Suggestion, "deleteMany").mockResolvedValue({ deletedCount: 1 });
