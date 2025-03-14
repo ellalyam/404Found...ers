@@ -40,3 +40,8 @@ $hover-color: rgb(55, 3, 81);
   text-align: left;
   text-overflow: ellipsis;
 }
+
+.componentContainer {
+  display:flex;
+  flex-direction: column-reverse;
+}

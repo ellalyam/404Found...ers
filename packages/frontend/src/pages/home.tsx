@@ -128,9 +128,6 @@ export default function Home() {
 
         <div className="suggestionContainer">
           <div className="titleRow">
-            <h2 id="name" className="suggestionElement">
-              #
-            </h2>
             <h2 id="emotion" className="suggestionElement">
               Emotion
             </h2>
@@ -142,7 +139,9 @@ export default function Home() {
             </h2>
           </div>
           <div className="space"></div>
-          {ComponentMapper.mapSuggestions(previousUserSuggestions)}
+          <div className="componentContainer">
+            {ComponentMapper.mapSuggestions(previousUserSuggestions)}
+          </div>
         </div>
       </section>
     </div>

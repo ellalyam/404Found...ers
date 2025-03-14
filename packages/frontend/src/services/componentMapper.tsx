@@ -33,7 +33,6 @@ export class ComponentMapper {
             title={track.title}
             album={track.album}
             artist={track.artist}
-            coverImage={track.coverImage}
           />
         );
       });

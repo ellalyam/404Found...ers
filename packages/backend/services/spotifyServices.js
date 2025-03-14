@@ -37,7 +37,7 @@ async function getUserTopTracks(accessToken, count) {
     url +
       new URLSearchParams({
         type: "tracks",
-        time_range: "medium_term",
+        time_range: "long_term",
         limit: count,
       }),
     {
