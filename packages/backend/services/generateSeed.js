@@ -15,11 +15,16 @@ function findScore(emotions, emotion) {
  * @returns {number} - Normalized weighted sum based on userScores
  */
 function getMeasure(weights, userScores) {
-  return (
-    weights
-      .map((emotion, i) => emotion * userScores[i])
-      .reduce((a, v) => a + v, 0) / weights.reduce((a, v) => a + v, 0)
+  const weightedEmotions = weights
+    .map((emotion, i) => emotion * userScores[i])
+    .sort()
+    .slice(-3);
+  const normWeighted = weightedEmotions.map(
+    (n) =>
+      (n - Math.min(...weightedEmotions)) /
+      (Math.max(...weightedEmotions) - Math.min(...weightedEmotions)),
   );
+  return normWeighted.reduce((a, v) => a + v, 0) / 3;
 }
 
 /**
@@ -43,10 +48,10 @@ function generateSeed(emotions) {
   // Fiddle with these weights to tune suggestions
   // [anger, anxiety, boredom, calmness, concentration, joy, romance, excitement]
   const weights = {
-    danceability: [0.7, 0.7, 0.1, 0.65, 0.95, 0.8, 0.9, 0.5],
+    danceability: [0.7, 0.7, 0.1, 0.65, 0.85, 0.8, 0.9, 0.5],
     energy: [1.0, 0.15, 0.8, 0.1, 0.35, 0.4, 0.4, 0.4],
     speechiness: [0.5, 0.15, 0.4, 0.35, 0.05, 0.35, 0.4, 0.45],
-    valence: [0.15, 0.85, 0.7, 0.65, 0.5, 0.95, 0.9, 0.95],
+    valence: [0.15, 0.85, 0.7, 0.65, 0.4, 0.95, 0.9, 0.95],
   };
 
   return {
