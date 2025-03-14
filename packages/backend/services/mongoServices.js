@@ -62,13 +62,11 @@ function removeUser(spotifyId) {
  * @param {JSON} suggestion - Instance of a suggestion
  */
 async function addSuggestion(suggestion, spotifyId) {
-  //  Refactored for clarity, are id and _id different? if so, is that necessary?
   const user = await findUser(spotifyId);
 
   const thisSuggestion = new Suggestion({
     mood: suggestion.mood,
     name: suggestion.name,
-    id: suggestion.id,
     dateSuggested: new Date(suggestion.dateSuggested),
     tracks: suggestion.tracks,
   });
