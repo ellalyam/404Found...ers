@@ -29,7 +29,6 @@ export default function Suggestion() {
     // Captures screenshot
     const imageSrc = webcamRef.current?.getScreenshot(videoConstraints);
     
-
     if (imageSrc) {
       console.log(imageSrc);
 
@@ -72,14 +71,9 @@ export default function Suggestion() {
   const startWebcam = () => {
     console.log("start webcam");
 
-    // Captures image 1.5 seconds into webcam being open
-    setTimeout(() => {
-      console.log("create capture");
-      capture();
-    }, 1499);
-
     // Turns camera off after 3 seconds
     setTimeout(() => {
+      capture();
       setCaptureEnable(false);
       navigate("/home");
     }, 3000);
