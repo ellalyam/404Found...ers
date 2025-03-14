@@ -5,20 +5,16 @@ export interface TrackInterface {
   title: string;
   album: string;
   artist: string;
-  coverImage: string;
 }
 
 const Track: React.FC<TrackInterface> = ({
   title,
   album,
   artist,
-  coverImage,
 }) => {
   return (
     <a className="trackRow" target="_blank" href="https://open.spotify.com/">
-      <div className="coverImageWrapper">
-        <img className="coverImage" src={coverImage} alt="Album Image" />
-      </div>
+
       <h2 id="title" className="suggestionElement">
         {title}
       </h2>
