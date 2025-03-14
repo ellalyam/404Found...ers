@@ -33,7 +33,7 @@ export class UserDataService {
     }
   }
 
-  public static async deleteUser(): Promise<JSON | undefined> {
+  public static async deleteUser(): Promise<boolean> {
     const spotifyToken = localStorage.getItem("spotify_access_token");
     const spotifyId = localStorage.getItem("spotify_id");
 
@@ -43,7 +43,7 @@ export class UserDataService {
         headers.set("Token", spotifyToken);
       }
 
-      const response = await fetch(backendUri + `${spotifyId}`, {
+      const response = await fetch(backendUri + `/${spotifyId}`, {
         method: "DELETE",
         headers,
       });
@@ -57,9 +57,10 @@ export class UserDataService {
       } else if (response.status >= 400) {
         throw new Error(`HTTP Error | Status: ${response.status}`);
       }
-      return await response.json();
+      return true;
     } catch (error) {
       console.error(`Error while fetching suggestions | Code: ${error}`);
+      return false;
     }
   }
 }

@@ -27,6 +27,11 @@ export default function Sidebar() {
   const handleAccountDeletion = () => {
     UserDataService.deleteUser().then((result) => {
       if (result) {
+        localStorage.setItem("spotify_id", "");
+        localStorage.setItem("spotify_access_token", "");
+        localStorage.setItem("spotify_refresh_token", "");
+        localStorage.setItem("spotify_auth_verifier", "");
+        localStorage.setItem("isLoggedIn", "false");
         navigate("/")
       }
     })
