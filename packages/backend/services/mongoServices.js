@@ -17,7 +17,7 @@ function addUser(user) {
  */
 async function findUser(spotifyId) {
   let user = await User.findOne(
-    { spotifyId: await spotifyId },
+    { spotifyId },
     "spotifyId suggestions",
   );
   if (!user) {
@@ -31,7 +31,7 @@ async function findUser(spotifyId) {
 
 /**
  * Finds suggestions corresponding with a user
- * @param {number} spotifyId - Spotify ID associated with a user
+ * @param String spotifyId - Spotify ID associated with a user
  */
 async function findSuggestions(spotifyId) {
   const sIds = await findUser(spotifyId).then((user) => user.suggestions);
@@ -54,7 +54,7 @@ function removeSuggestions(spotifyId) {
  */
 function removeUser(spotifyId) {
   removeSuggestions(spotifyId);
-  return User.findByIdAndDelete(spotifyId);
+  return User.findOneAndDelete({ spotifyId });
 }
 
 /**
