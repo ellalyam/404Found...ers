@@ -43,9 +43,6 @@ const Suggestion: React.FC<SuggestionInterface> = ({
         setTrackDisplay(!trackDisplay);
       }}>
       <div className="suggestionRow">
-        <h2 id="name" className="suggestionElement">
-          {name}
-        </h2>
         <h2 id="emotion" className="suggestionElement">
           {mood}
         </h2>
