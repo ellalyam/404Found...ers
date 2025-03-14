@@ -64,6 +64,8 @@ export default function Suggestion() {
         navigate("/home");
       }).catch((error) => {
         console.error("Error in request:", error);
+        alert("Error sending image");
+        navigate("/home");
       });
     }
   }, [webcamRef, screenshotCaptured]);
