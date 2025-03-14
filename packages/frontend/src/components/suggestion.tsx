@@ -22,7 +22,6 @@ export interface SuggestionInterface {
 
 const Suggestion: React.FC<SuggestionInterface> = ({
   id,
-  name,
   dateSuggested,
   mood,
   tracks,
