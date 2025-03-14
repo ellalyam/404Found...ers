@@ -9,19 +9,15 @@ export interface SuggestionResponse {
 
 export interface SuggestionInterface {
   mood: string;
-  name: string;
-  id: string;
   dateSuggested: Date;
   tracks: {
     title: string;
-    album: string;
     artist: string;
-    coverImage: string;
+    spotifyUrl: string;
   }[];
 }
 
 const Suggestion: React.FC<SuggestionInterface> = ({
-  id,
   dateSuggested,
   mood,
   tracks,
@@ -36,7 +32,6 @@ const Suggestion: React.FC<SuggestionInterface> = ({
   }, [tracks]);
   return (
     <div
-      id={id}
       className="suggestionContainer"
       onClick={() => {
         setTrackDisplay(!trackDisplay);

@@ -27,8 +27,8 @@ async function getRecommendedTracks(seed, mainEmotion) {
     tracks: responseData.content.map((track) => {
       return {
         title: track.trackTitle,
-        id: track.href.substring(31),
         artist: track.artists[0].name,
+        spotifyUrl: track.href,
       };
     }),
   };

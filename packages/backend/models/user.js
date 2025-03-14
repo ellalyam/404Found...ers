@@ -9,7 +9,11 @@ const TrackSchema = new mongoose.Schema(
     artist: {
       type: String,
       required: true,
-    }
+    },
+    spotifyUrl: {
+      type: String,
+      required: false,
+    },
   }
 );
 
@@ -26,7 +30,7 @@ const SuggestionSchema = new mongoose.Schema({
   tracks: {
     type: [TrackSchema],
     required: true,
-  }
+  },
 });
 
 const UserSchema = new mongoose.Schema({
@@ -39,8 +43,8 @@ const UserSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Suggestion",
-    }
-  ]
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

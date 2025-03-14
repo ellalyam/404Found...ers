@@ -12,9 +12,7 @@ export class ComponentMapper {
         return (
           <Suggestion
             key={index}
-            id={suggestion.id}
             mood={suggestion.mood}
-            name={suggestion.name}
             tracks={suggestion.tracks}
             dateSuggested={new Date(suggestion.dateSuggested)}
           />
@@ -31,8 +29,8 @@ export class ComponentMapper {
           <Track
             key={index}
             title={track.title}
-            album={track.album}
             artist={track.artist}
+            spotifyUrl={track.spotifyUrl}
           />
         );
       });
