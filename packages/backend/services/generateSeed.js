@@ -57,12 +57,12 @@ function generateSeed(emotions) {
   // Fiddle with these weights to tune suggestions
   // [anger, anxiety, boredom, calmness, concentration, joy, romance, excitement]
   const weights = {
-    danceability: [0.2, 0.1, 0.1, 0.2, 0.15, 0.9, 0.8, 0.9],
-    energy: [1.0, 0.2, 0.8, 0.0, 0.3, 0.86, 0.5, 0.9],
+    danceability: [0.3, 0.1, 0.1, 0.2, 0.15, 0.9, 0.8, 0.9],
+    energy: [1.0, 0.2, 0.15, 0.0, 0.3, 0.86, 0.5, 0.9],
     speechiness: [0.4, 0.15, 0.4, 0.35, 0.05, 0.35, 0.4, 0.1],
-    valence: [0.0, 0.1, 0.7, 0.5, 0.2, 1.0, 0.9, 0.95],
+    valence: [0.0, 0.1, 0.3, 0.45, 0.2, 1.0, 0.9, 0.95],
     acousticness: [0.5, 0.3, 0.7, 0.9, 0.8, 0.5, 0.9, 0.1],
-    instrumentalness: [0.9, 0.3, 0.5, 0.7, 0.9, 0.3, 0.4, 0.1],
+    instrumentalness: [0.9, 0.3, 0.5, 0.6, 0.9, 0.3, 0.4, 0.1],
     liveness: [0.5, 0.5, 0.2, 0.2, 0.1, 0.7, 0.4, 0.9],
     loudness: [1.0, 0.1, 0.3, 0.05, 0.2, 0.85, 0.5, 0.9]
   };
