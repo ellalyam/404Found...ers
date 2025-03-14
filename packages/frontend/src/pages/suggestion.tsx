@@ -7,8 +7,8 @@ import "../styling/suggestionPage.scss";
 import { useNavigate } from "react-router-dom";
 
 const videoConstraints = {
-  width: 320,
-  height: 240,
+  width: 840,
+  height: 420,
   facingMode: "user",
 };
 

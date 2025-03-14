@@ -27,10 +27,9 @@ mongoose
 const app = express();
 const port = 8080;
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
 
 app.post("/:id/suggestions", async (req, res) => {
-//app.post("/suggestions", async (req, res) => {
   const id = req.params["id"];
   const spotifyToken = req.headers.token;
   await getUserId(spotifyToken)
