@@ -1,3 +1,4 @@
+
 /**
  * Finds a users score for a given emotion
  * @param {JSON} emotions - From Hume (or user form?)
@@ -15,16 +16,24 @@ function findScore(emotions, emotion) {
  * @returns {number} - Normalized weighted sum based on userScores
  */
 function getMeasure(weights, userScores) {
-  const weightedEmotions = weights
+  let res = weights
     .map((emotion, i) => emotion * userScores[i])
     .sort()
-    .slice(-3);
-  const normWeighted = weightedEmotions.map(
-    (n) =>
-      (n - Math.min(...weightedEmotions)) /
-      (Math.max(...weightedEmotions) - Math.min(...weightedEmotions)),
-  );
-  return normWeighted.reduce((a, v) => a + v, 0) / 3;
+    .slice(-1)[0];
+
+  if (res > 0.5) {
+    res = res + 0.05;
+  } else {
+    res = res - 0.05;
+  }
+
+  if (res > 1) {
+    return 1;
+  } else if (res < 0) {
+    return 0;
+  } else {
+    return res;
+  }
 }
 
 /**
@@ -48,10 +57,14 @@ function generateSeed(emotions) {
   // Fiddle with these weights to tune suggestions
   // [anger, anxiety, boredom, calmness, concentration, joy, romance, excitement]
   const weights = {
-    danceability: [0.7, 0.7, 0.1, 0.65, 0.85, 0.8, 0.9, 0.5],
-    energy: [1.0, 0.15, 0.8, 0.1, 0.35, 0.4, 0.4, 0.4],
-    speechiness: [0.5, 0.15, 0.4, 0.35, 0.05, 0.35, 0.4, 0.45],
-    valence: [0.15, 0.85, 0.7, 0.65, 0.4, 0.95, 0.9, 0.95],
+    danceability: [0.2, 0.1, 0.1, 0.2, 0.15, 0.9, 0.8, 0.9],
+    energy: [1.0, 0.2, 0.8, 0.0, 0.3, 0.86, 0.5, 0.9],
+    speechiness: [0.4, 0.15, 0.4, 0.35, 0.05, 0.35, 0.4, 0.1],
+    valence: [0.0, 0.1, 0.7, 0.5, 0.2, 1.0, 0.9, 0.95],
+    acousticness: [0.5, 0.3, 0.7, 0.9, 0.8, 0.5, 0.9, 0.1],
+    instrumentalness: [0.9, 0.3, 0.5, 0.7, 0.9, 0.3, 0.4, 0.1],
+    liveness: [0.5, 0.5, 0.2, 0.2, 0.1, 0.7, 0.4, 0.9],
+    loudness: [1.0, 0.1, 0.3, 0.05, 0.2, 0.85, 0.5, 0.9]
   };
 
   return {
@@ -59,7 +72,11 @@ function generateSeed(emotions) {
     energy: getMeasure(weights["energy"], scoreArr),
     speechiness: getMeasure(weights["speechiness"], scoreArr),
     valence: getMeasure(weights["valence"], scoreArr),
-  };
+    acousticness: getMeasure(weights["acousticness"], scoreArr),
+    instrumentalness: getMeasure(weights["instrumentalness"], scoreArr),
+    liveness: getMeasure(weights["liveness"], scoreArr),
+    loudness: getMeasure(weights["loudness"], scoreArr)
+    };
 }
 
 export { findScore, generateSeed };
