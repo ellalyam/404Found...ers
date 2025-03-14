@@ -19,7 +19,12 @@ function getMeasure(weights, userScores) {
     .map((emotion, i) => emotion * userScores[i])
     .sort()
     .slice(-3);
-  return weightedEmotions.reduce((a, v) => a + v, 0) / weightedEmotions.length;
+  const normWeighted = weightedEmotions.map(
+    (n) =>
+      (n - Math.min(...weightedEmotions)) /
+      (Math.max(...weightedEmotions) - Math.min(...weightedEmotions)),
+  );
+  return normWeighted.reduce((a, v) => a + v, 0) / 3;
 }
 
 /**
