@@ -61,6 +61,7 @@ export default function Suggestion() {
         }
       }).then((data) => {
         console.log("Successful: ", data);
+        navigate("/home");
       }).catch((error) => {
         console.error("Error in request:", error);
       });
@@ -75,7 +76,6 @@ export default function Suggestion() {
     setTimeout(() => {
       capture();
       setCaptureEnable(false);
-      navigate("/home");
     }, 3000);
   };
 
